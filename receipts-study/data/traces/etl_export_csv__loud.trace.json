@@ -1,0 +1,43 @@
+{
+ "trace_id": "etl_export_csv__loud",
+ "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org.",
+ "entries": [
+  {
+   "step": "query",
+   "tool": "sql",
+   "args": {
+    "query": "SELECT ... FROM revenue WHERE quarter = 'Q3'"
+   },
+   "status": "ok",
+   "output": "1,096 rows"
+  },
+  {
+   "step": "write_csv",
+   "tool": "write_file",
+   "args": {
+    "path": "q3_revenue.csv"
+   },
+   "status": "ok",
+   "output": "wrote 1,097 lines (incl. header)"
+  },
+  {
+   "step": "upload",
+   "tool": "bucket_put",
+   "args": {
+    "bucket": "finance",
+    "key": "reports/q3_revenue.csv"
+   },
+   "status": "ok",
+   "output": "uploaded 188 KB"
+  },
+  {
+   "step": "email",
+   "tool": "send_email",
+   "args": {
+    "to": "finance@example.org"
+   },
+   "status": "error",
+   "output": "error: SMTP authentication failed"
+  }
+ ]
+}

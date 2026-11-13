@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "fetch_crm",
+   "ok_pattern": "^200 OK; [1-9][0-9,]* contacts"
+  },
+  {
+   "name": "upsert",
+   "ok_pattern": "errors: 0"
+  },
+  {
+   "name": "count_check",
+   "ok_pattern": "count: 1840"
+  }
+ ]
+}

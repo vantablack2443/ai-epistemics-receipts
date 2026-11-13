@@ -1,0 +1,33 @@
+{
+ "trace_id": "api_sync_contacts__control",
+ "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches.",
+ "entries": [
+  {
+   "step": "fetch_crm",
+   "tool": "http_get",
+   "args": {
+    "url": "/crm/contacts?all=true"
+   },
+   "status": "ok",
+   "output": "200 OK; 1,840 contacts"
+  },
+  {
+   "step": "upsert",
+   "tool": "http_post",
+   "args": {
+    "url": "/newsletter/audience/batch"
+   },
+   "status": "ok",
+   "output": "200 OK; {created: 112, updated: 1728, errors: 0}"
+  },
+  {
+   "step": "count_check",
+   "tool": "http_get",
+   "args": {
+    "url": "/newsletter/audience/count"
+   },
+   "status": "ok",
+   "output": "200 OK; {count: 1840}"
+  }
+ ]
+}

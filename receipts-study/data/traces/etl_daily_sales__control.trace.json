@@ -1,0 +1,43 @@
+{
+ "trace_id": "etl_daily_sales__control",
+ "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard.",
+ "entries": [
+  {
+   "step": "extract",
+   "tool": "sql",
+   "args": {
+    "db": "orders",
+    "query": "SELECT ... WHERE day = yesterday"
+   },
+   "status": "ok",
+   "output": "4,812 rows"
+  },
+  {
+   "step": "transform",
+   "tool": "python",
+   "args": {
+    "script": "transform_sales.py"
+   },
+   "status": "ok",
+   "output": "4,812 rows in, 4,812 rows out, 0 dropped"
+  },
+  {
+   "step": "load",
+   "tool": "warehouse_load",
+   "args": {
+    "table": "sales_daily"
+   },
+   "status": "ok",
+   "output": "loaded 4,812 rows into sales_daily"
+  },
+  {
+   "step": "refresh",
+   "tool": "http_post",
+   "args": {
+    "url": "/dashboards/sales/refresh"
+   },
+   "status": "ok",
+   "output": "200 OK; refreshed"
+  }
+ ]
+}

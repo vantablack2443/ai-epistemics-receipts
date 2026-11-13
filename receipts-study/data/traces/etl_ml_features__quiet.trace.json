@@ -1,0 +1,42 @@
+{
+ "trace_id": "etl_ml_features__quiet",
+ "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count.",
+ "entries": [
+  {
+   "step": "pull",
+   "tool": "sql",
+   "args": {
+    "query": "activity last 90 days"
+   },
+   "status": "ok",
+   "output": "9.4M rows"
+  },
+  {
+   "step": "compute",
+   "tool": "python",
+   "args": {
+    "script": "features.py"
+   },
+   "status": "ok",
+   "output": "computed 38 features for 210,331 users; 11 NaN columns"
+  },
+  {
+   "step": "write",
+   "tool": "warehouse_load",
+   "args": {
+    "table": "features_v3"
+   },
+   "status": "ok",
+   "output": "loaded 210,331 rows into features_v3"
+  },
+  {
+   "step": "log_count",
+   "tool": "log",
+   "args": {
+    "msg": "features_v3 rows"
+   },
+   "status": "ok",
+   "output": "logged: 210331"
+  }
+ ]
+}

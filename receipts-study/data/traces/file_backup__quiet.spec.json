@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "archive",
+   "ok_pattern": "exit 0; project\\.tar\\.gz [1-9][0-9.]* MB"
+  },
+  {
+   "name": "copy",
+   "ok_pattern": "exit 0; 1 file copied"
+  },
+  {
+   "name": "checksum",
+   "ok_pattern": "checksums match"
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+ "trace_id": "api_webhook_register__absent",
+ "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered.",
+ "entries": [
+  {
+   "step": "register",
+   "tool": "http_post",
+   "args": {
+    "url": "/webhooks",
+    "body": {
+     "event": "order.paid",
+     "target": "https://hooks.example.org/orders"
+    }
+   },
+   "status": "ok",
+   "output": "201 Created; webhook wh-310"
+  },
+  {
+   "step": "send_test",
+   "tool": "http_post",
+   "args": {
+    "url": "/webhooks/wh-310/test"
+   },
+   "status": "ok",
+   "output": "202 Accepted; delivery d-9921"
+  }
+ ]
+}

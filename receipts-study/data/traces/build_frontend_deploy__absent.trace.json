@@ -1,0 +1,33 @@
+{
+ "trace_id": "build_frontend_deploy__absent",
+ "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN.",
+ "entries": [
+  {
+   "step": "install",
+   "tool": "shell",
+   "args": {
+    "cmd": "npm ci"
+   },
+   "status": "ok",
+   "output": "exit 0; added 1,204 packages"
+  },
+  {
+   "step": "lint_test",
+   "tool": "shell",
+   "args": {
+    "cmd": "npm run lint && npm test"
+   },
+   "status": "ok",
+   "output": "exit 0; 0 lint errors; Tests: 96 passed, 96 total"
+  },
+  {
+   "step": "build",
+   "tool": "shell",
+   "args": {
+    "cmd": "npm run build"
+   },
+   "status": "ok",
+   "output": "exit 0; dist/ 2.1 MB (14 files)"
+  }
+ ]
+}

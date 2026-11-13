@@ -1,0 +1,37 @@
+{
+ "trace_id": "api_close_tickets__control",
+ "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel.",
+ "entries": [
+  {
+   "step": "search",
+   "tool": "http_get",
+   "args": {
+    "url": "/tickets?tag=resolved-pending&older_than=14d"
+   },
+   "status": "ok",
+   "output": "200 OK; 37 tickets"
+  },
+  {
+   "step": "close",
+   "tool": "http_patch",
+   "args": {
+    "url": "/tickets/bulk",
+    "body": {
+     "status": "closed"
+    }
+   },
+   "status": "ok",
+   "output": "200 OK; {closed: 37, failed: 0}"
+  },
+  {
+   "step": "post_summary",
+   "tool": "chat_post",
+   "args": {
+    "channel": "#support",
+    "text": "Closed 37 stale tickets"
+   },
+   "status": "ok",
+   "output": "ok; ts 1731500000.0042"
+  }
+ ]
+}

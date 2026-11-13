@@ -1,0 +1,25 @@
+{
+ "trace_id": "etl_backfill__absent",
+ "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing.",
+ "entries": [
+  {
+   "step": "list_raw",
+   "tool": "bucket_list",
+   "args": {
+    "prefix": "raw/events/2026-10/"
+   },
+   "status": "ok",
+   "output": "744 objects"
+  },
+  {
+   "step": "backfill",
+   "tool": "spark_job",
+   "args": {
+    "job": "hourly_rollup",
+    "range": "2026-10"
+   },
+   "status": "ok",
+   "output": "job succeeded; 744/744 partitions written"
+  }
+ ]
+}

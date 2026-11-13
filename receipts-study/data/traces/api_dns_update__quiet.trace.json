@@ -1,0 +1,37 @@
+{
+ "trace_id": "api_dns_update__quiet",
+ "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP.",
+ "entries": [
+  {
+   "step": "update_record",
+   "tool": "http_put",
+   "args": {
+    "url": "/zones/example.org/records/app",
+    "body": {
+     "type": "A",
+     "value": "203.0.113.20"
+    }
+   },
+   "status": "ok",
+   "output": "200 OK; record updated"
+  },
+  {
+   "step": "wait",
+   "tool": "sleep",
+   "args": {
+    "seconds": 120
+   },
+   "status": "ok",
+   "output": "slept 120s"
+  },
+  {
+   "step": "verify",
+   "tool": "dns_lookup",
+   "args": {
+    "name": "app.example.org"
+   },
+   "status": "ok",
+   "output": "A 198.51.100.7"
+  }
+ ]
+}

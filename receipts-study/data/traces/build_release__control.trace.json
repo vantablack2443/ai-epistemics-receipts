@@ -1,0 +1,42 @@
+{
+ "trace_id": "build_release__control",
+ "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag.",
+ "entries": [
+  {
+   "step": "test",
+   "tool": "shell",
+   "args": {
+    "cmd": "cargo test --all"
+   },
+   "status": "ok",
+   "output": "exit 0; test result: ok. 412 passed; 0 failed; 0 ignored"
+  },
+  {
+   "step": "build",
+   "tool": "shell",
+   "args": {
+    "cmd": "cargo build --release"
+   },
+   "status": "ok",
+   "output": "exit 0; Finished release [optimized] target(s) in 1m 42s"
+  },
+  {
+   "step": "tag",
+   "tool": "shell",
+   "args": {
+    "cmd": "git tag v2.4.0"
+   },
+   "status": "ok",
+   "output": "exit 0"
+  },
+  {
+   "step": "push_tag",
+   "tool": "shell",
+   "args": {
+    "cmd": "git push origin v2.4.0"
+   },
+   "status": "ok",
+   "output": "exit 0; * [new tag] v2.4.0 -> v2.4.0"
+  }
+ ]
+}

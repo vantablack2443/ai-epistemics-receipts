@@ -1,0 +1,51 @@
+{
+ "trace_id": "api_create_invoice__quiet",
+ "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer.",
+ "entries": [
+  {
+   "step": "get_customer",
+   "tool": "http_get",
+   "args": {
+    "url": "/customers/C-1042"
+   },
+   "status": "ok",
+   "output": "200 OK; {name: 'Ada Weber', email: 'ada@example.org'}"
+  },
+  {
+   "step": "create_invoice",
+   "tool": "http_post",
+   "args": {
+    "url": "/invoices",
+    "body": {
+     "customer": "C-1042",
+     "qty": 3,
+     "rate": 120
+    }
+   },
+   "status": "ok",
+   "output": "201 Created; {id: 'INV-2291', total: 360.00}"
+  },
+  {
+   "step": "render_pdf",
+   "tool": "http_get",
+   "args": {
+    "url": "/invoices/INV-2291/pdf"
+   },
+   "status": "ok",
+   "output": "200 OK; application/pdf 84 KB"
+  },
+  {
+   "step": "send_email",
+   "tool": "http_post",
+   "args": {
+    "url": "/mail/send",
+    "body": {
+     "to": "ada@example.org",
+     "attach": "INV-2291.pdf"
+    }
+   },
+   "status": "ok",
+   "output": "200 OK; {queued: 0, suppressed: 1, reason: 'recipient on bounce list'}"
+  }
+ ]
+}

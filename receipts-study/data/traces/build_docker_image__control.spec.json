@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "build",
+   "ok_pattern": "Successfully tagged api:1\\.9\\.0"
+  },
+  {
+   "name": "scan",
+   "ok_pattern": "CRITICAL: 0\\)"
+  },
+  {
+   "name": "push",
+   "ok_pattern": "digest: sha256"
+  }
+ ]
+}

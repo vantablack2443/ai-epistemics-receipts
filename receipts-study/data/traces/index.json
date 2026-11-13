@@ -1,0 +1,770 @@
+[
+ {
+  "trace_id": "file_backup__control",
+  "task_id": "file_backup",
+  "domain": "files",
+  "condition": "control",
+  "complete": true,
+  "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original."
+ },
+ {
+  "trace_id": "file_backup__loud",
+  "task_id": "file_backup",
+  "domain": "files",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original."
+ },
+ {
+  "trace_id": "file_backup__quiet",
+  "task_id": "file_backup",
+  "domain": "files",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original."
+ },
+ {
+  "trace_id": "file_backup__absent",
+  "task_id": "file_backup",
+  "domain": "files",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original."
+ },
+ {
+  "trace_id": "file_rename_photos__control",
+  "task_id": "file_rename_photos",
+  "domain": "files",
+  "condition": "control",
+  "complete": true,
+  "goal": "In ./photos, rename every .JPG file to lowercase .jpg, then write a list of the renamed files to renamed.txt, then delete any empty subfolders."
+ },
+ {
+  "trace_id": "file_rename_photos__loud",
+  "task_id": "file_rename_photos",
+  "domain": "files",
+  "condition": "loud",
+  "complete": false,
+  "goal": "In ./photos, rename every .JPG file to lowercase .jpg, then write a list of the renamed files to renamed.txt, then delete any empty subfolders."
+ },
+ {
+  "trace_id": "file_rename_photos__quiet",
+  "task_id": "file_rename_photos",
+  "domain": "files",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "In ./photos, rename every .JPG file to lowercase .jpg, then write a list of the renamed files to renamed.txt, then delete any empty subfolders."
+ },
+ {
+  "trace_id": "file_rename_photos__absent",
+  "task_id": "file_rename_photos",
+  "domain": "files",
+  "condition": "absent",
+  "complete": false,
+  "goal": "In ./photos, rename every .JPG file to lowercase .jpg, then write a list of the renamed files to renamed.txt, then delete any empty subfolders."
+ },
+ {
+  "trace_id": "file_dedupe__control",
+  "task_id": "file_dedupe",
+  "domain": "files",
+  "condition": "control",
+  "complete": true,
+  "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered."
+ },
+ {
+  "trace_id": "file_dedupe__loud",
+  "task_id": "file_dedupe",
+  "domain": "files",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered."
+ },
+ {
+  "trace_id": "file_dedupe__quiet",
+  "task_id": "file_dedupe",
+  "domain": "files",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered."
+ },
+ {
+  "trace_id": "file_dedupe__absent",
+  "task_id": "file_dedupe",
+  "domain": "files",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered."
+ },
+ {
+  "trace_id": "file_config_update__control",
+  "task_id": "file_config_update",
+  "domain": "files",
+  "condition": "control",
+  "complete": true,
+  "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service."
+ },
+ {
+  "trace_id": "file_config_update__loud",
+  "task_id": "file_config_update",
+  "domain": "files",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service."
+ },
+ {
+  "trace_id": "file_config_update__quiet",
+  "task_id": "file_config_update",
+  "domain": "files",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service."
+ },
+ {
+  "trace_id": "file_config_update__absent",
+  "task_id": "file_config_update",
+  "domain": "files",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service."
+ },
+ {
+  "trace_id": "file_logrotate__control",
+  "task_id": "file_logrotate",
+  "domain": "files",
+  "condition": "control",
+  "complete": true,
+  "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down."
+ },
+ {
+  "trace_id": "file_logrotate__loud",
+  "task_id": "file_logrotate",
+  "domain": "files",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down."
+ },
+ {
+  "trace_id": "file_logrotate__quiet",
+  "task_id": "file_logrotate",
+  "domain": "files",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down."
+ },
+ {
+  "trace_id": "file_logrotate__absent",
+  "task_id": "file_logrotate",
+  "domain": "files",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down."
+ },
+ {
+  "trace_id": "file_export_notes__control",
+  "task_id": "file_export_notes",
+  "domain": "files",
+  "condition": "control",
+  "complete": true,
+  "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive."
+ },
+ {
+  "trace_id": "file_export_notes__loud",
+  "task_id": "file_export_notes",
+  "domain": "files",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive."
+ },
+ {
+  "trace_id": "file_export_notes__quiet",
+  "task_id": "file_export_notes",
+  "domain": "files",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive."
+ },
+ {
+  "trace_id": "file_export_notes__absent",
+  "task_id": "file_export_notes",
+  "domain": "files",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive."
+ },
+ {
+  "trace_id": "api_create_invoice__control",
+  "task_id": "api_create_invoice",
+  "domain": "api",
+  "condition": "control",
+  "complete": true,
+  "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer."
+ },
+ {
+  "trace_id": "api_create_invoice__loud",
+  "task_id": "api_create_invoice",
+  "domain": "api",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer."
+ },
+ {
+  "trace_id": "api_create_invoice__quiet",
+  "task_id": "api_create_invoice",
+  "domain": "api",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer."
+ },
+ {
+  "trace_id": "api_create_invoice__absent",
+  "task_id": "api_create_invoice",
+  "domain": "api",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer."
+ },
+ {
+  "trace_id": "api_sync_contacts__control",
+  "task_id": "api_sync_contacts",
+  "domain": "api",
+  "condition": "control",
+  "complete": true,
+  "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches."
+ },
+ {
+  "trace_id": "api_sync_contacts__loud",
+  "task_id": "api_sync_contacts",
+  "domain": "api",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches."
+ },
+ {
+  "trace_id": "api_sync_contacts__quiet",
+  "task_id": "api_sync_contacts",
+  "domain": "api",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches."
+ },
+ {
+  "trace_id": "api_sync_contacts__absent",
+  "task_id": "api_sync_contacts",
+  "domain": "api",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches."
+ },
+ {
+  "trace_id": "api_rotate_key__control",
+  "task_id": "api_rotate_key",
+  "domain": "api",
+  "condition": "control",
+  "complete": true,
+  "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key."
+ },
+ {
+  "trace_id": "api_rotate_key__loud",
+  "task_id": "api_rotate_key",
+  "domain": "api",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key."
+ },
+ {
+  "trace_id": "api_rotate_key__quiet",
+  "task_id": "api_rotate_key",
+  "domain": "api",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key."
+ },
+ {
+  "trace_id": "api_rotate_key__absent",
+  "task_id": "api_rotate_key",
+  "domain": "api",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key."
+ },
+ {
+  "trace_id": "api_close_tickets__control",
+  "task_id": "api_close_tickets",
+  "domain": "api",
+  "condition": "control",
+  "complete": true,
+  "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel."
+ },
+ {
+  "trace_id": "api_close_tickets__loud",
+  "task_id": "api_close_tickets",
+  "domain": "api",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel."
+ },
+ {
+  "trace_id": "api_close_tickets__quiet",
+  "task_id": "api_close_tickets",
+  "domain": "api",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel."
+ },
+ {
+  "trace_id": "api_close_tickets__absent",
+  "task_id": "api_close_tickets",
+  "domain": "api",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel."
+ },
+ {
+  "trace_id": "api_dns_update__control",
+  "task_id": "api_dns_update",
+  "domain": "api",
+  "condition": "control",
+  "complete": true,
+  "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP."
+ },
+ {
+  "trace_id": "api_dns_update__loud",
+  "task_id": "api_dns_update",
+  "domain": "api",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP."
+ },
+ {
+  "trace_id": "api_dns_update__quiet",
+  "task_id": "api_dns_update",
+  "domain": "api",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP."
+ },
+ {
+  "trace_id": "api_dns_update__absent",
+  "task_id": "api_dns_update",
+  "domain": "api",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP."
+ },
+ {
+  "trace_id": "api_webhook_register__control",
+  "task_id": "api_webhook_register",
+  "domain": "api",
+  "condition": "control",
+  "complete": true,
+  "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered."
+ },
+ {
+  "trace_id": "api_webhook_register__loud",
+  "task_id": "api_webhook_register",
+  "domain": "api",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered."
+ },
+ {
+  "trace_id": "api_webhook_register__quiet",
+  "task_id": "api_webhook_register",
+  "domain": "api",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered."
+ },
+ {
+  "trace_id": "api_webhook_register__absent",
+  "task_id": "api_webhook_register",
+  "domain": "api",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered."
+ },
+ {
+  "trace_id": "build_release__control",
+  "task_id": "build_release",
+  "domain": "build",
+  "condition": "control",
+  "complete": true,
+  "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag."
+ },
+ {
+  "trace_id": "build_release__loud",
+  "task_id": "build_release",
+  "domain": "build",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag."
+ },
+ {
+  "trace_id": "build_release__quiet",
+  "task_id": "build_release",
+  "domain": "build",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag."
+ },
+ {
+  "trace_id": "build_release__absent",
+  "task_id": "build_release",
+  "domain": "build",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag."
+ },
+ {
+  "trace_id": "build_frontend_deploy__control",
+  "task_id": "build_frontend_deploy",
+  "domain": "build",
+  "condition": "control",
+  "complete": true,
+  "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN."
+ },
+ {
+  "trace_id": "build_frontend_deploy__loud",
+  "task_id": "build_frontend_deploy",
+  "domain": "build",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN."
+ },
+ {
+  "trace_id": "build_frontend_deploy__quiet",
+  "task_id": "build_frontend_deploy",
+  "domain": "build",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN."
+ },
+ {
+  "trace_id": "build_frontend_deploy__absent",
+  "task_id": "build_frontend_deploy",
+  "domain": "build",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN."
+ },
+ {
+  "trace_id": "build_migrate_db__control",
+  "task_id": "build_migrate_db",
+  "domain": "build",
+  "condition": "control",
+  "complete": true,
+  "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version."
+ },
+ {
+  "trace_id": "build_migrate_db__loud",
+  "task_id": "build_migrate_db",
+  "domain": "build",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version."
+ },
+ {
+  "trace_id": "build_migrate_db__quiet",
+  "task_id": "build_migrate_db",
+  "domain": "build",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version."
+ },
+ {
+  "trace_id": "build_migrate_db__absent",
+  "task_id": "build_migrate_db",
+  "domain": "build",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version."
+ },
+ {
+  "trace_id": "build_docker_image__control",
+  "task_id": "build_docker_image",
+  "domain": "build",
+  "condition": "control",
+  "complete": true,
+  "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0."
+ },
+ {
+  "trace_id": "build_docker_image__loud",
+  "task_id": "build_docker_image",
+  "domain": "build",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0."
+ },
+ {
+  "trace_id": "build_docker_image__quiet",
+  "task_id": "build_docker_image",
+  "domain": "build",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0."
+ },
+ {
+  "trace_id": "build_docker_image__absent",
+  "task_id": "build_docker_image",
+  "domain": "build",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0."
+ },
+ {
+  "trace_id": "build_coverage_gate__control",
+  "task_id": "build_coverage_gate",
+  "domain": "build",
+  "condition": "control",
+  "complete": true,
+  "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report."
+ },
+ {
+  "trace_id": "build_coverage_gate__loud",
+  "task_id": "build_coverage_gate",
+  "domain": "build",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report."
+ },
+ {
+  "trace_id": "build_coverage_gate__quiet",
+  "task_id": "build_coverage_gate",
+  "domain": "build",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report."
+ },
+ {
+  "trace_id": "build_coverage_gate__absent",
+  "task_id": "build_coverage_gate",
+  "domain": "build",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report."
+ },
+ {
+  "trace_id": "build_docs_publish__control",
+  "task_id": "build_docs_publish",
+  "domain": "build",
+  "condition": "control",
+  "complete": true,
+  "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org."
+ },
+ {
+  "trace_id": "build_docs_publish__loud",
+  "task_id": "build_docs_publish",
+  "domain": "build",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org."
+ },
+ {
+  "trace_id": "build_docs_publish__quiet",
+  "task_id": "build_docs_publish",
+  "domain": "build",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org."
+ },
+ {
+  "trace_id": "build_docs_publish__absent",
+  "task_id": "build_docs_publish",
+  "domain": "build",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org."
+ },
+ {
+  "trace_id": "etl_daily_sales__control",
+  "task_id": "etl_daily_sales",
+  "domain": "data",
+  "condition": "control",
+  "complete": true,
+  "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard."
+ },
+ {
+  "trace_id": "etl_daily_sales__loud",
+  "task_id": "etl_daily_sales",
+  "domain": "data",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard."
+ },
+ {
+  "trace_id": "etl_daily_sales__quiet",
+  "task_id": "etl_daily_sales",
+  "domain": "data",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard."
+ },
+ {
+  "trace_id": "etl_daily_sales__absent",
+  "task_id": "etl_daily_sales",
+  "domain": "data",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard."
+ },
+ {
+  "trace_id": "etl_dedupe_customers__control",
+  "task_id": "etl_dedupe_customers",
+  "domain": "data",
+  "condition": "control",
+  "complete": true,
+  "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain."
+ },
+ {
+  "trace_id": "etl_dedupe_customers__loud",
+  "task_id": "etl_dedupe_customers",
+  "domain": "data",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain."
+ },
+ {
+  "trace_id": "etl_dedupe_customers__quiet",
+  "task_id": "etl_dedupe_customers",
+  "domain": "data",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain."
+ },
+ {
+  "trace_id": "etl_dedupe_customers__absent",
+  "task_id": "etl_dedupe_customers",
+  "domain": "data",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain."
+ },
+ {
+  "trace_id": "etl_backfill__control",
+  "task_id": "etl_backfill",
+  "domain": "data",
+  "condition": "control",
+  "complete": true,
+  "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing."
+ },
+ {
+  "trace_id": "etl_backfill__loud",
+  "task_id": "etl_backfill",
+  "domain": "data",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing."
+ },
+ {
+  "trace_id": "etl_backfill__quiet",
+  "task_id": "etl_backfill",
+  "domain": "data",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing."
+ },
+ {
+  "trace_id": "etl_backfill__absent",
+  "task_id": "etl_backfill",
+  "domain": "data",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing."
+ },
+ {
+  "trace_id": "etl_export_csv__control",
+  "task_id": "etl_export_csv",
+  "domain": "data",
+  "condition": "control",
+  "complete": true,
+  "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org."
+ },
+ {
+  "trace_id": "etl_export_csv__loud",
+  "task_id": "etl_export_csv",
+  "domain": "data",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org."
+ },
+ {
+  "trace_id": "etl_export_csv__quiet",
+  "task_id": "etl_export_csv",
+  "domain": "data",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org."
+ },
+ {
+  "trace_id": "etl_export_csv__absent",
+  "task_id": "etl_export_csv",
+  "domain": "data",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org."
+ },
+ {
+  "trace_id": "etl_ml_features__control",
+  "task_id": "etl_ml_features",
+  "domain": "data",
+  "condition": "control",
+  "complete": true,
+  "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count."
+ },
+ {
+  "trace_id": "etl_ml_features__loud",
+  "task_id": "etl_ml_features",
+  "domain": "data",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count."
+ },
+ {
+  "trace_id": "etl_ml_features__quiet",
+  "task_id": "etl_ml_features",
+  "domain": "data",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count."
+ },
+ {
+  "trace_id": "etl_ml_features__absent",
+  "task_id": "etl_ml_features",
+  "domain": "data",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count."
+ },
+ {
+  "trace_id": "etl_archive_old__control",
+  "task_id": "etl_archive_old",
+  "domain": "data",
+  "condition": "control",
+  "complete": true,
+  "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table."
+ },
+ {
+  "trace_id": "etl_archive_old__loud",
+  "task_id": "etl_archive_old",
+  "domain": "data",
+  "condition": "loud",
+  "complete": false,
+  "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table."
+ },
+ {
+  "trace_id": "etl_archive_old__quiet",
+  "task_id": "etl_archive_old",
+  "domain": "data",
+  "condition": "quiet",
+  "complete": false,
+  "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table."
+ },
+ {
+  "trace_id": "etl_archive_old__absent",
+  "task_id": "etl_archive_old",
+  "domain": "data",
+  "condition": "absent",
+  "complete": false,
+  "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table."
+ }
+]

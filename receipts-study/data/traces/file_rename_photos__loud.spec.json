@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "list",
+   "ok_pattern": "exit 0; [1-9][0-9]* files found"
+  },
+  {
+   "name": "rename",
+   "ok_pattern": "renamed ([1-9][0-9]*) of \\1 files"
+  },
+  {
+   "name": "write_list",
+   "ok_pattern": "wrote renamed\\.txt"
+  },
+  {
+   "name": "cleanup",
+   "ok_pattern": "exit 0; removed [0-9]+ empty folders"
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"args":{"cmd":"codecov upload"},"hash":"c6df1957e5ac25722366bdcc3b941964a1accd89a42ac802b43a89fee4711f13","id":"c6df1957","output":"exit 0; report uploaded: https://codecov.example/r/7781","prev_hash":"0000000000000000000000000000000000000000000000000000000000000000","seq":0,"status":"ok","step":"upload","tool":"shell"}

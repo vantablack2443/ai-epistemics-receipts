@@ -1,0 +1,33 @@
+{
+ "trace_id": "file_logrotate__control",
+ "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down.",
+ "entries": [
+  {
+   "step": "find_old",
+   "tool": "shell",
+   "args": {
+    "cmd": "find /var/log/app -name '*.log' -mtime +7"
+   },
+   "status": "ok",
+   "output": "exit 0; 62 files"
+  },
+  {
+   "step": "compress",
+   "tool": "shell",
+   "args": {
+    "cmd": "gzip <62 files>"
+   },
+   "status": "ok",
+   "output": "exit 0; 62 files compressed"
+  },
+  {
+   "step": "disk_check",
+   "tool": "shell",
+   "args": {
+    "cmd": "du -sh /var/log/app"
+   },
+   "status": "ok",
+   "output": "before 9.1G, after 1.4G"
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "copy",
+   "ok_pattern": "INSERT 0 [1-9][0-9,]*"
+  },
+  {
+   "name": "verify_count",
+   "ok_pattern": "archive ([0-9,]+) = source \\1"
+  },
+  {
+   "name": "delete",
+   "ok_pattern": "DELETE [1-9][0-9,]*"
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "update_record",
+   "ok_pattern": "record updated"
+  },
+  {
+   "name": "wait",
+   "ok_pattern": "slept"
+  },
+  {
+   "name": "verify",
+   "ok_pattern": "A 203\\.0\\.113\\.20"
+  }
+ ]
+}

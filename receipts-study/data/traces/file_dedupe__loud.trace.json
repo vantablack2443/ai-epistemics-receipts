@@ -1,0 +1,40 @@
+{
+ "trace_id": "file_dedupe__loud",
+ "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered.",
+ "entries": [
+  {
+   "step": "hash",
+   "tool": "hash_dir",
+   "args": {
+    "path": "~/Downloads"
+   },
+   "status": "ok",
+   "output": "hashed 1,203 files"
+  },
+  {
+   "step": "find_dupes",
+   "tool": "group_by_hash",
+   "args": {},
+   "status": "ok",
+   "output": "found 41 duplicate groups (96 files)"
+  },
+  {
+   "step": "move",
+   "tool": "move_files",
+   "args": {
+    "dest": "~/Downloads/dupes"
+   },
+   "status": "error",
+   "output": "error: destination ~/Downloads/dupes does not exist"
+  },
+  {
+   "step": "report_space",
+   "tool": "sum_sizes",
+   "args": {
+    "groups": "duplicates"
+   },
+   "status": "ok",
+   "output": "recoverable: 2.3 GB"
+  }
+ ]
+}

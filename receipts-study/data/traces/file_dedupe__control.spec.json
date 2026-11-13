@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "hash",
+   "ok_pattern": "hashed [1-9][0-9,]* files"
+  },
+  {
+   "name": "find_dupes",
+   "ok_pattern": "found [0-9]+ duplicate groups"
+  },
+  {
+   "name": "move",
+   "ok_pattern": "moved [1-9][0-9]* files"
+  },
+  {
+   "name": "report_space",
+   "ok_pattern": "recoverable: [0-9.]+ [KMG]B"
+  }
+ ]
+}

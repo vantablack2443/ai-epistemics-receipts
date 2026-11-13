@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "register",
+   "ok_pattern": "^201 Created"
+  },
+  {
+   "name": "send_test",
+   "ok_pattern": "^202 Accepted"
+  },
+  {
+   "name": "check_delivery",
+   "ok_pattern": "status: 'delivered'"
+  }
+ ]
+}

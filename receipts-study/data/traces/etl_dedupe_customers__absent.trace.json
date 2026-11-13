@@ -1,0 +1,33 @@
+{
+ "trace_id": "etl_dedupe_customers__absent",
+ "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain.",
+ "entries": [
+  {
+   "step": "normalize",
+   "tool": "sql",
+   "args": {
+    "query": "UPDATE customers SET email_norm = lower(trim(email))"
+   },
+   "status": "ok",
+   "output": "UPDATE 52,110"
+  },
+  {
+   "step": "find_groups",
+   "tool": "sql",
+   "args": {
+    "query": "SELECT email_norm, count(*) ... HAVING count(*) > 1"
+   },
+   "status": "ok",
+   "output": "618 groups"
+  },
+  {
+   "step": "merge",
+   "tool": "python",
+   "args": {
+    "script": "merge_customers.py"
+   },
+   "status": "ok",
+   "output": "merged 618 of 618 groups"
+  }
+ ]
+}

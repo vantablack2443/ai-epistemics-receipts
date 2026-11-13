@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "normalize",
+   "ok_pattern": "UPDATE [1-9][0-9,]*"
+  },
+  {
+   "name": "find_groups",
+   "ok_pattern": "[0-9]+ groups"
+  },
+  {
+   "name": "merge",
+   "ok_pattern": "merged ([0-9]+) of \\1 groups"
+  },
+  {
+   "name": "verify",
+   "ok_pattern": "^0 groups"
+  }
+ ]
+}

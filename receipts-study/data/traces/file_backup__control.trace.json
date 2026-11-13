@@ -1,0 +1,33 @@
+{
+ "trace_id": "file_backup__control",
+ "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original.",
+ "entries": [
+  {
+   "step": "archive",
+   "tool": "shell",
+   "args": {
+    "cmd": "tar czf project.tar.gz ./project"
+   },
+   "status": "ok",
+   "output": "exit 0; project.tar.gz 48.2 MB"
+  },
+  {
+   "step": "copy",
+   "tool": "shell",
+   "args": {
+    "cmd": "cp project.tar.gz /mnt/backup/"
+   },
+   "status": "ok",
+   "output": "exit 0; 1 file copied (48.2 MB)"
+  },
+  {
+   "step": "checksum",
+   "tool": "shell",
+   "args": {
+    "cmd": "sha256sum project.tar.gz /mnt/backup/project.tar.gz"
+   },
+   "status": "ok",
+   "output": "a91f03c2...  project.tar.gz\na91f03c2...  /mnt/backup/project.tar.gz\nchecksums match"
+  }
+ ]
+}

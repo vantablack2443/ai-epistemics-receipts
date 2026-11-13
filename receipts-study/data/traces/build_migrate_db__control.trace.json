@@ -1,0 +1,42 @@
+{
+ "trace_id": "build_migrate_db__control",
+ "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version.",
+ "entries": [
+  {
+   "step": "backup",
+   "tool": "shell",
+   "args": {
+    "cmd": "pg_dump staging > pre_migrate.sql"
+   },
+   "status": "ok",
+   "output": "exit 0; 312 MB written"
+  },
+  {
+   "step": "migrate",
+   "tool": "shell",
+   "args": {
+    "cmd": "alembic upgrade head"
+   },
+   "status": "ok",
+   "output": "exit 0; applied 3 migrations; now at 0057"
+  },
+  {
+   "step": "smoke",
+   "tool": "shell",
+   "args": {
+    "cmd": "pytest tests/smoke --env staging"
+   },
+   "status": "ok",
+   "output": "exit 0; 22 passed in 14.2s"
+  },
+  {
+   "step": "version",
+   "tool": "shell",
+   "args": {
+    "cmd": "alembic current"
+   },
+   "status": "ok",
+   "output": "0057 (head)"
+  }
+ ]
+}

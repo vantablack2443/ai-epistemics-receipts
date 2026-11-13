@@ -1,0 +1,46 @@
+{
+ "trace_id": "file_config_update__quiet",
+ "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service.",
+ "entries": [
+  {
+   "step": "edit_log_level",
+   "tool": "edit_file",
+   "args": {
+    "path": "config.toml",
+    "key": "log_level",
+    "value": "warn"
+   },
+   "status": "ok",
+   "output": "1 replacement made"
+  },
+  {
+   "step": "edit_workers",
+   "tool": "edit_file",
+   "args": {
+    "path": "config.toml",
+    "key": "max_workers",
+    "value": 8
+   },
+   "status": "ok",
+   "output": "0 replacements made"
+  },
+  {
+   "step": "validate",
+   "tool": "shell",
+   "args": {
+    "cmd": "toml-check config.toml"
+   },
+   "status": "ok",
+   "output": "exit 0; config.toml: valid"
+  },
+  {
+   "step": "restart",
+   "tool": "shell",
+   "args": {
+    "cmd": "systemctl restart app"
+   },
+   "status": "ok",
+   "output": "exit 0; app.service active (running)"
+  }
+ ]
+}

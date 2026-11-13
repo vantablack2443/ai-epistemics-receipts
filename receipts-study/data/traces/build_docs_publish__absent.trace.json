@@ -1,0 +1,24 @@
+{
+ "trace_id": "build_docs_publish__absent",
+ "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org.",
+ "entries": [
+  {
+   "step": "build",
+   "tool": "shell",
+   "args": {
+    "cmd": "mkdocs build"
+   },
+   "status": "ok",
+   "output": "exit 0; built 148 pages"
+  },
+  {
+   "step": "linkcheck",
+   "tool": "shell",
+   "args": {
+    "cmd": "lychee site/"
+   },
+   "status": "ok",
+   "output": "exit 0; 2,310 links checked, 0 errors"
+  }
+ ]
+}

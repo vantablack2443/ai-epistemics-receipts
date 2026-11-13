@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "search",
+   "ok_pattern": "^200 OK; [1-9][0-9]* tickets"
+  },
+  {
+   "name": "close",
+   "ok_pattern": "failed: 0"
+  },
+  {
+   "name": "post_summary",
+   "ok_pattern": "^ok"
+  }
+ ]
+}

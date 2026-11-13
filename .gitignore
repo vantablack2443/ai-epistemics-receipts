@@ -1,0 +1,5 @@
+.env
+.venv/
+ledger/target/
+__pycache__/
+data/graded/reports/

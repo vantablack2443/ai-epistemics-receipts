@@ -1,0 +1,43 @@
+{
+ "trace_id": "file_export_notes__quiet",
+ "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive.",
+ "entries": [
+  {
+   "step": "query",
+   "tool": "db_query",
+   "args": {
+    "sql": "SELECT * FROM notes"
+   },
+   "status": "ok",
+   "output": "312 rows"
+  },
+  {
+   "step": "write_md",
+   "tool": "write_files",
+   "args": {
+    "dir": "./export"
+   },
+   "status": "ok",
+   "output": "wrote 312 files"
+  },
+  {
+   "step": "zip",
+   "tool": "shell",
+   "args": {
+    "cmd": "zip -r export.zip ./export"
+   },
+   "status": "ok",
+   "output": "exit 0; export.zip 3.8 MB"
+  },
+  {
+   "step": "upload",
+   "tool": "drive_upload",
+   "args": {
+    "file": "export.zip",
+    "folder": "Shared/Notes"
+   },
+   "status": "ok",
+   "output": "upload queued (pending; 0 B transferred)"
+  }
+ ]
+}

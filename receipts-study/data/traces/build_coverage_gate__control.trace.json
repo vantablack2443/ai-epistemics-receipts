@@ -1,0 +1,24 @@
+{
+ "trace_id": "build_coverage_gate__control",
+ "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report.",
+ "entries": [
+  {
+   "step": "test",
+   "tool": "shell",
+   "args": {
+    "cmd": "pytest --cov"
+   },
+   "status": "ok",
+   "output": "exit 0; 530 passed; TOTAL coverage 84%"
+  },
+  {
+   "step": "upload",
+   "tool": "shell",
+   "args": {
+    "cmd": "codecov upload"
+   },
+   "status": "ok",
+   "output": "exit 0; report uploaded: https://codecov.example/r/7781"
+  }
+ ]
+}

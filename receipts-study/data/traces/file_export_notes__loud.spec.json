@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "query",
+   "ok_pattern": "[1-9][0-9]* rows"
+  },
+  {
+   "name": "write_md",
+   "ok_pattern": "wrote [1-9][0-9]* files"
+  },
+  {
+   "name": "zip",
+   "ok_pattern": "exit 0; export\\.zip [1-9][0-9.]* MB"
+  },
+  {
+   "name": "upload",
+   "ok_pattern": "uploaded export\\.zip"
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+# Development run 1
+
+Status: preliminary development only, 2026-11-13 UTC. Source `dev-01` is AI-drafted and not human reviewed. This record does not represent final experiment results.
+
+The runner invoked `gpt-6.1-terra` with reasoning effort `low`, `--ephemeral`, `--ignore-user-config`, `--sandbox read-only`, `--skip-git-repo-check`, `--json`, and `--color never` in a fresh process for every call. The requested model is recorded; no resolved model metadata was exposed in the observed event stream. Codex CLI reported version 0.169.0. The execution route was signed-in Codex, outside the desktop workspace sandbox, using an empty temporary working directory. Global and residual instructions have not yet been independently audited; the study measures the Codex harness, not a bare model API.
+
+All ten outputs completed, with no tool events among the parsed item types. Durations ranged from approximately five to twelve seconds; the complete ten-call sequence took approximately 66 seconds. Output lengths were B: 101, 75, 45; A: 102, 73, 50; C: 101, 71, 52; direct A: 44. Seven of ten outputs exceed their respective limits. The outputs were retained unchanged. These observations motivate prompt refinement during development, but do not establish general compliance rates or preservation performance.
+
+Exact prompts, event streams, outputs, statuses, timestamps and word counts are retained in `artifacts/development.sqlite`. Raw logs are local-only until reviewed and sanitized. The system records no resolved model identity and no human labels. The current runner does not yet meet all protocol requirements for final collection: among other gaps, it lacks a reviewed freeze, complete immutable run manifest and separate raw artifact exports, full failure classification and final collection scheduling. No final collection should be launched with it in its current state.

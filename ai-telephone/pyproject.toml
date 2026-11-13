@@ -1,0 +1,26 @@
+[project]
+name = "ai-telephone"
+version = "0.1.0"
+description = "Controlled study of repeated engineering-handoff summaries"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.4.6",
+    "pandas>=3.1.1",
+    "pydantic>=2.14.3",
+    "streamlit>=1.67.0",
+]
+
+[project.scripts]
+ai-telephone = "ai_telephone.runner:main"
+ai-telephone-analysis = "ai_telephone.analyze_cli:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

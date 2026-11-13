@@ -1,10 +1,6 @@
 {
  "required": [
   {
-   "name": "hash",
-   "ok_pattern": "hashed [1-9][0-9,]* files"
-  },
-  {
    "name": "find_dupes",
    "ok_pattern": "found [0-9]+ duplicate groups"
   },

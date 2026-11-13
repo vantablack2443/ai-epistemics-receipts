@@ -1,6 +1,6 @@
 {
  "trace_id": "etl_ml_features__control",
- "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count.",
+ "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features (every feature column must be usable: no NaN columns and no constant columns), write them to features_v3, and log the row count.",
  "entries": [
   {
    "step": "noise_0",
@@ -27,7 +27,7 @@
     "script": "features.py"
    },
    "status": "ok",
-   "output": "computed 38 features for 210,331 users; 0 NaN columns"
+   "output": "computed 38 features for 210,331 users; 0 NaN columns; 0 constant columns"
   },
   {
    "step": "noise_1",

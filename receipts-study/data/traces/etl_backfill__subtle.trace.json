@@ -1,6 +1,6 @@
 {
  "trace_id": "etl_backfill__subtle",
- "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing.",
+ "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then make sure no hours are missing.",
  "entries": [
   {
    "step": "noise_0",

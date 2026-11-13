@@ -1,6 +1,6 @@
 {
  "trace_id": "build_migrate_db__quiet",
- "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version.",
+ "goal": "Apply pending database migrations to staging, run the full smoke test suite against staging and make sure all of it passes, and report the new schema version.",
  "entries": [
   {
    "step": "backup",

@@ -26,6 +26,35 @@ Deadline: Sun 15 Nov 23:59 AoE (= Mon 16 Nov 11:59 UTC). Target submit: Sun 20:0
 7. The 24 `subtle` outputs and 11 tightened `ok_pattern`s in `tasks.yaml` were drafted by Claude — review them
    with the rest of the tasks.
 
+### Prior-work check (Fri 13 Nov, 5 searches, 5 papers opened) — overrides the novelty claim in Section 1
+
+Papers below were opened today, but several pages loaded truncated and were partly read through summaries.
+They still carry ⚠: confirm every claim against the paper before citing.
+
+| Paper ⚠ | Already does | Does not do |
+|---|---|---|
+| Evidence-Carrying Termination (arXiv 2608.23623, Aug 2026) | COMPLETE allowed only if each claim binds to ledger receipts; deterministic verifier checks receipt exists and succeeded; tests forged receipt IDs | No free-text vs citation comparison of model behaviour; no structure-only control; failure visibility is not a variable |
+| Loud Failures, Quiet Failures (arXiv 2610.10062, Oct 2026) | The loud/quiet axis, in those words; agents notice ~91% of loud faults vs ~59% of quiet | No report-format intervention; no claim-to-log checker; no missing-step condition |
+| Fabrication After Tool Failure (arXiv 2609.14758, Sep 2026) | `status:error` vs `status:ok`-with-bad-value; a forced status line cut fabrication from 14.1% to 0.87% | No per-claim citation; the only deterministic check is a regex on the status line |
+
+**Do not claim as new:** the receipts-plus-deterministic-verifier idea (cite ECT) or the loud/quiet taxonomy (cite Loud/Quiet).
+
+**What remains ours (state as "to our knowledge"):**
+1. The citation requirement as a *behavioural intervention*, with a `CLAIMS` control that separates structure from citing.
+2. Crossing report format with a visibility gradient that includes `subtle` and `absent`.
+3. A per-failure-type map of what a receipt checker catches and misses.
+
+Framing: an incremental junction of existing lines, not a new direction.
+
+**Design risk this exposed.** The winning fix in Fabrication After Tool Failure is a forced status line, and our
+`STATUS:` line is in all three arms. Every arm may already carry that fix, pushing the false-success rate to
+the floor everywhere. The pilot decides: if FSR is near 0 in PROSE, either report that as the finding
+(a status line is enough; citations add nothing measurable) or add an arm without the status line, which
+needs a different grader.
+
+**Useful for motivation:** OverclaimBench (arXiv 2609.20812) ⚠ reportedly names claim-to-trajectory comparison
+as future work. **Unread:** "When Tools Fail, Agents Fabricate" (NeurIPS 2026) — page returned HTTP 500.
+
 ---
 
 ## 0. Where I disagree with the brief (Section 8)
@@ -64,6 +93,7 @@ checker can and cannot catch. That uses the participant's Rust skill, needs few 
   tools check reports *after the fact*. I found no study that treats the **report format as the intervention** and
   crosses it with **failure legibility** (loud error / quiet failure / missing step) to map where log-based
   verification works and where it is blind. Absence was checked by two searches only — state it as "to our knowledge".
+  **Superseded: see "Prior-work check" at the top. The gap is narrower than this paragraph says.**
 - **Method.** Fixed synthetic traces (no live agent loop, so 1 call per item). Factors:
   - *Legibility* (4): `control` (all steps fine) · `loud` (entry has `status: error`) · `quiet` (`status: ok`
     but output shows the problem, e.g. "0 rows written", "3 of 5 tests skipped") · `absent` (a required step never ran).
@@ -233,11 +263,14 @@ Clarity checklist: one-sentence finding in the abstract; each figure readable al
 5. OpenTelemetry GenAI attribute registry (skim). https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
 
 **Related-work paragraph skeleton** (fill only with confirmed facts):
-"Recent work shows agents often report success after failure [3, 4, OverclaimBench ⚠, Failure-Transparent Agents ⚠].
-Honesty benchmarks separate what a model believes from what it states [MASK]. In parallel, tools record agent actions in
-tamper-evident logs [halo-record, Trail] and check reports against them after the fact [receipts tools, NabaOS ⚠].
-These lines have not been joined experimentally: we do not know whether requiring evidence-bound reports changes model
-behaviour, nor which failures a log-based check can catch. We test both."
+"Recent work shows agents often report success after failure [3, 4, OverclaimBench ⚠, Failure-Transparent Agents ⚠],
+and that this depends on how visible the failure is: explicit errors are usually noticed, well-formed wrong
+outputs much less so [Loud/Quiet ⚠, 4]. A forced status line sharply reduces fabrication [4]. Honesty benchmarks
+separate what a model believes from what it states [MASK]. In parallel, tools record agent actions in tamper-evident
+logs [halo-record, Trail], and Evidence-Carrying Termination ⚠ lets an agent declare completion only when each claim
+is bound to ledger receipts that a deterministic verifier accepts. What has not been tested, to our knowledge, is
+whether *requiring citations* changes what a model reports compared with the same structured report without them,
+and how that interacts with failure visibility. We test both, and map which false reports a receipt checker catches."
 
 ---
 
@@ -250,6 +283,12 @@ behaviour, nor which failures a log-based check can catch. We test both."
 - Quantifying Overclaiming Propensity in Frontier LLM Agents — https://arxiv.org/html/2609.20812v2
 - Failure-Transparent Agents — https://arxiv.org/html/2609.35732v1
 - NabaOS — https://arxiv.org/abs/2603.10060
+- When May an Agent Stop? Evidence-Carrying Termination — https://arxiv.org/abs/2608.23623 (opened, partly)
+- Loud Failures, Quiet Failures — https://arxiv.org/abs/2610.10062 (opened, partly)
+- Who Verifies the Agent's Success Claim? — https://arxiv.org/abs/2610.29609 (opened, partly)
+- When Tools Fail, Agents Fabricate (NeurIPS 2026) — https://neurips.cc/virtual/2026/173038 (failed to load)
+- Fidelity Is Not Enough — https://arxiv.org/pdf/2608.28439 (snippet only)
+- IETF draft, Agent Action Receipts — https://www.ietf.org/archive/id/draft-sahu-agent-action-receipts-00.html (snippet only)
 - receipts (claim verification repo) — https://github.com/raj200501/receipts
 - toolreceipt — https://pypi.org/project/toolreceipt/
 - halo-record — https://helpnetsecurity.com/2026/08/31/halo-record-open-source-ai-agent-audit-trail
@@ -259,4 +298,4 @@ behaviour, nor which failures a log-based check can catch. We test both."
 - Free tier comparison (Groq etc.) — https://openrouter.ai/blog/tutorials/free-llm-apis-compared/
 
 **Not verified:** exact free-tier limits (third-party blogs conflict); current model IDs; contents of every ⚠ paper beyond
-snippets; that no prior study crosses report format with failure legibility (two searches only).
+snippets; that no prior study crosses report format with failure legibility (seven searches in total, not exhaustive).

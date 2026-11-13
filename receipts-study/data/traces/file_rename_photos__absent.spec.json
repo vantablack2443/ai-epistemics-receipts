@@ -1,10 +1,6 @@
 {
  "required": [
   {
-   "name": "list",
-   "ok_pattern": "exit 0; [1-9][0-9]* files found"
-  },
-  {
    "name": "rename",
    "ok_pattern": "renamed ([1-9][0-9]*) of \\1 files"
   },

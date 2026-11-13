@@ -1,6 +1,6 @@
 {
  "trace_id": "build_release__quiet",
- "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag.",
+ "goal": "Cut release v2.4.0: run the full test suite and make sure every test runs and passes, build the release binary, tag the commit v2.4.0, and push the tag.",
  "entries": [
   {
    "step": "noise_0",

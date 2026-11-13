@@ -1,16 +1,8 @@
 {
  "required": [
   {
-   "name": "get_customer",
-   "ok_pattern": "^200 OK"
-  },
-  {
    "name": "create_invoice",
    "ok_pattern": "^201 Created"
-  },
-  {
-   "name": "render_pdf",
-   "ok_pattern": "^200 OK; application/pdf"
   },
   {
    "name": "send_email",

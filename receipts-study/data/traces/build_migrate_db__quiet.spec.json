@@ -1,10 +1,6 @@
 {
  "required": [
   {
-   "name": "backup",
-   "ok_pattern": "exit 0; [1-9][0-9]* MB written"
-  },
-  {
    "name": "migrate",
    "ok_pattern": "applied [1-9][0-9]* migrations"
   },

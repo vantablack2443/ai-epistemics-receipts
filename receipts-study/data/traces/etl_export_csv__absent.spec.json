@@ -1,10 +1,6 @@
 {
  "required": [
   {
-   "name": "query",
-   "ok_pattern": "[1-9][0-9,]* rows"
-  },
-  {
    "name": "write_csv",
    "ok_pattern": "wrote [1-9][0-9,]* lines"
   },

@@ -1,6 +1,6 @@
 {
  "trace_id": "etl_archive_old__control",
- "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table.",
+ "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify that the copied row count matches the source exactly, and only then delete them from the live orders table.",
  "entries": [
   {
    "step": "noise_0",

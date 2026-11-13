@@ -1,10 +1,6 @@
 {
  "required": [
   {
-   "name": "find_old",
-   "ok_pattern": "exit 0; [1-9][0-9]* files"
-  },
-  {
    "name": "compress",
    "ok_pattern": "exit 0; [1-9][0-9]* files compressed"
   },

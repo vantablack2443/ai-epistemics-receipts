@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from prompts import FORMATS, PROMPT_VERSION, build_prompt  # noqa: E402
+from prompts import FORMATS, FRAMINGS, PROMPT_VERSION, build_prompt  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 TRACES = ROOT / "data" / "traces"
@@ -32,7 +32,7 @@ PROVIDERS = {
     "openrouter": {"base": "https://openrouter.ai/api/v1", "key": "OPENROUTER_API_KEY", "rpm": 15},
     "gemini": {"base": "https://generativelanguage.googleapis.com/v1beta", "key": "GEMINI_API_KEY", "rpm": 10},
 }
-MAX_TOKENS = 1024
+MAX_TOKENS = 4096  # reasoning models (gpt-oss) spend hidden tokens before answering; 1024 truncated replies
 
 
 class DailyLimit(Exception):
@@ -59,7 +59,9 @@ def api_key(provider):
 def http(method, url, headers, body=None):
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method=method,
-                                 headers={"Content-Type": "application/json", **headers})
+                                 # Groq's Cloudflare front rejects urllib's default User-Agent (error 1010)
+                                 headers={"Content-Type": "application/json", "User-Agent": "receipts-study/0.1",
+                                          **headers})
     with urllib.request.urlopen(req, timeout=120) as r:
         return json.loads(r.read())
 
@@ -92,11 +94,11 @@ def call_model(provider, model, system, user):
                 "generationConfig": {"temperature": 0, "maxOutputTokens": MAX_TOKENS}}
         res = http("POST", f"{base}/models/{model}:generateContent", headers, body)
         parts = res["candidates"][0].get("content", {}).get("parts", [])
-        return "".join(p.get("text", "") for p in parts)
+        return "".join(p.get("text", "") for p in parts), res.get("usageMetadata", {})
     body = {"model": model, "temperature": 0, "max_tokens": MAX_TOKENS,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
     res = http("POST", f"{base}/chat/completions", headers, body)
-    return res["choices"][0]["message"]["content"] or ""
+    return res["choices"][0]["message"]["content"] or "", res.get("usage", {})
 
 
 def call_with_retry(provider, model, system, user, tries=5):
@@ -138,8 +140,10 @@ def safe_name(model_spec):
     return re.sub(r"[^A-Za-z0-9._-]+", "_", model_spec)
 
 
-def run(model_spec, limit_tasks, rpm, seed):
+def run(model_spec, limit_tasks, rpm, seed, framing="neutral"):
     provider, _, model = model_spec.partition(":")
+    # a non-neutral framing is analysed as its own "model" arm, e.g. groq:qwen/qwen3.8-27b+pressure
+    label = model_spec if framing == "neutral" else f"{model_spec}+{framing}"
     if provider != "mock" and provider not in PROVIDERS:
         sys.exit(f"unknown provider {provider!r}; use one of {list(PROVIDERS)} or mock")
     index = json.loads((TRACES / "index.json").read_text())
@@ -151,35 +155,41 @@ def run(model_spec, limit_tasks, rpm, seed):
     rows = sorted((r for r in index if r["task_id"] in order), key=lambda r: (order[r["task_id"]], r["condition"]))
 
     RESPONSES.mkdir(parents=True, exist_ok=True)
-    out_path = RESPONSES / f"{safe_name(model_spec)}.jsonl"
+    out_path = RESPONSES / f"{safe_name(label)}.jsonl"
     done = set()
     if out_path.exists():
         done = {json.loads(l)["key"] for l in out_path.read_text().splitlines() if l.strip()}
 
     interval = 60.0 / (rpm or PROVIDERS.get(provider, {}).get("rpm", 1000))
-    todo = [(r, f) for r in rows for f in FORMATS if f"{model_spec}|{r['trace_id']}|{f}|{PROMPT_VERSION}" not in done]
-    print(f"{model_spec}: {len(todo)} calls to make, {len(done)} cached")
+    # The key includes a hash of the exact prompt, so editing a task goal or template never reuses a stale response.
+    todo = []
+    for r in rows:
+        ledger = [json.loads(l) for l in (TRACES / f"{r['trace_id']}.ledger.jsonl").read_text().splitlines()]
+        for fmt in FORMATS:
+            system, user = build_prompt(r["goal"], ledger, fmt, framing)
+            phash = hashlib.sha256((system + "\n" + user).encode()).hexdigest()[:10]
+            key = f"{label}|{r['trace_id']}|{fmt}|{PROMPT_VERSION}|{phash}"
+            if key not in done:
+                todo.append((r, fmt, key, ledger, system, user))
+    print(f"{label}: {len(todo)} calls to make, {len(done)} cached")
     last = 0.0
     with out_path.open("a") as out:
-        for i, (r, fmt) in enumerate(todo, 1):
-            key = f"{model_spec}|{r['trace_id']}|{fmt}|{PROMPT_VERSION}"
-            ledger = [json.loads(l) for l in (TRACES / f"{r['trace_id']}.ledger.jsonl").read_text().splitlines()]
-            system, user = build_prompt(r["goal"], ledger, fmt)
+        for i, (r, fmt, key, ledger, system, user) in enumerate(todo, 1):
             if provider == "mock":
-                text = mock_response(key, ledger, fmt)
+                text, usage = mock_response(key, ledger, fmt), {}
             else:
                 time.sleep(max(0.0, interval - (time.time() - last)))
                 last = time.time()
                 try:
-                    text = call_with_retry(provider, model, system, user)
+                    text, usage = call_with_retry(provider, model, system, user)
                 except DailyLimit as e:
                     print(f"daily limit hit after {i - 1} calls; rerun later to resume.\n{e}", file=sys.stderr)
                     return
                 except RuntimeError as e:
                     print(f"  {r['trace_id']} {fmt}: {e} (skipped, will retry on next run)", file=sys.stderr)
                     continue
-            out.write(json.dumps({"key": key, "model": model_spec, "trace_id": r["trace_id"], "format": fmt,
-                                  "prompt_version": PROMPT_VERSION, "response": text,
+            out.write(json.dumps({"key": key, "model": label, "framing": framing, "trace_id": r["trace_id"], "format": fmt,
+                                  "prompt_version": PROMPT_VERSION, "response": text, "usage": usage,
                                   "ts": datetime.now(timezone.utc).isoformat()}) + "\n")
             out.flush()
             if i % 10 == 0:
@@ -198,11 +208,12 @@ def main():
     r.add_argument("--limit-tasks", type=int, default=0, help="only the first N (shuffled) base tasks; 0 = all")
     r.add_argument("--rpm", type=float, default=0, help="requests per minute (default per provider)")
     r.add_argument("--seed", type=int, default=0)
+    r.add_argument("--framing", choices=list(FRAMINGS), default="neutral")
     a = ap.parse_args()
     if a.cmd == "models":
         print("\n".join(list_models(a.provider)))
     else:
-        run(a.model, a.limit_tasks, a.rpm, a.seed)
+        run(a.model, a.limit_tasks, a.rpm, a.seed, a.framing)
 
 
 if __name__ == "__main__":

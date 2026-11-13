@@ -55,6 +55,7 @@ def validate(task):
     for s in task["steps"]:
         assert re.search(s["ok_pattern"], s["ok"]), f"{task['id']}/{s['name']}: ok output fails its own pattern"
     frag = next(s for s in task["steps"] if s["name"] == task["fragile"])
+    assert frag.get("required", True), f"{task['id']}: the fragile step must be a required step"
     for cond in ("loud", "quiet", "subtle"):
         assert not re.search(frag["ok_pattern"], task[cond]), f"{task['id']}: {cond} output passes ok_pattern"
     assert len({task["quiet"], task["subtle"], frag["ok"]}) == 3, f"{task['id']}: quiet/subtle/ok outputs must differ"
@@ -87,7 +88,8 @@ def main():
     index = []
     for task in tasks:
         validate(task)
-        spec = {"required": [{"name": s["name"], "ok_pattern": s["ok_pattern"]} for s in task["steps"]]}
+        spec = {"required": [{"name": s["name"], "ok_pattern": s["ok_pattern"]}
+                             for s in task["steps"] if s.get("required", True)]}
         for cond in CONDITIONS:
             tid = f"{task['id']}__{cond}"
             trace = {"trace_id": tid, "goal": task["goal"], "entries": entries_for(task, cond)}

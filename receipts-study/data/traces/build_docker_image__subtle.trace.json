@@ -1,6 +1,6 @@
 {
  "trace_id": "build_docker_image__subtle",
- "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0.",
+ "goal": "Build the Docker image for the API, scan it, and push it to the registry as api:1.9.0 only if the scan finds no critical vulnerabilities.",
  "entries": [
   {
    "step": "noise_0",

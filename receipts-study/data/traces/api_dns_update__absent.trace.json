@@ -3,6 +3,13 @@
  "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
    "step": "update_record",
    "tool": "http_put",
    "args": {
@@ -23,6 +30,33 @@
    },
    "status": "ok",
    "output": "slept 120s"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_2",
+   "tool": "note",
+   "args": {
+    "text": "plan drafted; proceeding step by step"
+   },
+   "status": "ok",
+   "output": "noted"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
   }
  ]
 }

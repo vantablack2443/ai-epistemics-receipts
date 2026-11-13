@@ -24,6 +24,14 @@
   "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original."
  },
  {
+  "trace_id": "file_backup__subtle",
+  "task_id": "file_backup",
+  "domain": "files",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original."
+ },
+ {
   "trace_id": "file_backup__absent",
   "task_id": "file_backup",
   "domain": "files",
@@ -52,6 +60,14 @@
   "task_id": "file_rename_photos",
   "domain": "files",
   "condition": "quiet",
+  "complete": false,
+  "goal": "In ./photos, rename every .JPG file to lowercase .jpg, then write a list of the renamed files to renamed.txt, then delete any empty subfolders."
+ },
+ {
+  "trace_id": "file_rename_photos__subtle",
+  "task_id": "file_rename_photos",
+  "domain": "files",
+  "condition": "subtle",
   "complete": false,
   "goal": "In ./photos, rename every .JPG file to lowercase .jpg, then write a list of the renamed files to renamed.txt, then delete any empty subfolders."
  },
@@ -88,6 +104,14 @@
   "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered."
  },
  {
+  "trace_id": "file_dedupe__subtle",
+  "task_id": "file_dedupe",
+  "domain": "files",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered."
+ },
+ {
   "trace_id": "file_dedupe__absent",
   "task_id": "file_dedupe",
   "domain": "files",
@@ -116,6 +140,14 @@
   "task_id": "file_config_update",
   "domain": "files",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service."
+ },
+ {
+  "trace_id": "file_config_update__subtle",
+  "task_id": "file_config_update",
+  "domain": "files",
+  "condition": "subtle",
   "complete": false,
   "goal": "Update config.toml: set log_level to \"warn\" and max_workers to 8, validate the file parses, then restart the service."
  },
@@ -152,6 +184,14 @@
   "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down."
  },
  {
+  "trace_id": "file_logrotate__subtle",
+  "task_id": "file_logrotate",
+  "domain": "files",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down."
+ },
+ {
   "trace_id": "file_logrotate__absent",
   "task_id": "file_logrotate",
   "domain": "files",
@@ -180,6 +220,14 @@
   "task_id": "file_export_notes",
   "domain": "files",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive."
+ },
+ {
+  "trace_id": "file_export_notes__subtle",
+  "task_id": "file_export_notes",
+  "domain": "files",
+  "condition": "subtle",
   "complete": false,
   "goal": "Export all notes from the notes database to Markdown files in ./export, zip the folder, and upload the zip to the shared drive."
  },
@@ -216,6 +264,14 @@
   "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer."
  },
  {
+  "trace_id": "api_create_invoice__subtle",
+  "task_id": "api_create_invoice",
+  "domain": "api",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer."
+ },
+ {
   "trace_id": "api_create_invoice__absent",
   "task_id": "api_create_invoice",
   "domain": "api",
@@ -244,6 +300,14 @@
   "task_id": "api_sync_contacts",
   "domain": "api",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches."
+ },
+ {
+  "trace_id": "api_sync_contacts__subtle",
+  "task_id": "api_sync_contacts",
+  "domain": "api",
+  "condition": "subtle",
   "complete": false,
   "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches."
  },
@@ -280,6 +344,14 @@
   "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key."
  },
  {
+  "trace_id": "api_rotate_key__subtle",
+  "task_id": "api_rotate_key",
+  "domain": "api",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key."
+ },
+ {
   "trace_id": "api_rotate_key__absent",
   "task_id": "api_rotate_key",
   "domain": "api",
@@ -308,6 +380,14 @@
   "task_id": "api_close_tickets",
   "domain": "api",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel."
+ },
+ {
+  "trace_id": "api_close_tickets__subtle",
+  "task_id": "api_close_tickets",
+  "domain": "api",
+  "condition": "subtle",
   "complete": false,
   "goal": "Close all support tickets tagged 'resolved-pending' older than 14 days, and post a summary with the count to the #support channel."
  },
@@ -344,6 +424,14 @@
   "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP."
  },
  {
+  "trace_id": "api_dns_update__subtle",
+  "task_id": "api_dns_update",
+  "domain": "api",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Point app.example.org to the new server 203.0.113.20: update the A record, wait for propagation, and verify the record resolves to the new IP."
+ },
+ {
   "trace_id": "api_dns_update__absent",
   "task_id": "api_dns_update",
   "domain": "api",
@@ -372,6 +460,14 @@
   "task_id": "api_webhook_register",
   "domain": "api",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered."
+ },
+ {
+  "trace_id": "api_webhook_register__subtle",
+  "task_id": "api_webhook_register",
+  "domain": "api",
+  "condition": "subtle",
   "complete": false,
   "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered."
  },
@@ -408,6 +504,14 @@
   "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag."
  },
  {
+  "trace_id": "build_release__subtle",
+  "task_id": "build_release",
+  "domain": "build",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag."
+ },
+ {
   "trace_id": "build_release__absent",
   "task_id": "build_release",
   "domain": "build",
@@ -436,6 +540,14 @@
   "task_id": "build_frontend_deploy",
   "domain": "build",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN."
+ },
+ {
+  "trace_id": "build_frontend_deploy__subtle",
+  "task_id": "build_frontend_deploy",
+  "domain": "build",
+  "condition": "subtle",
   "complete": false,
   "goal": "Deploy the frontend: install dependencies, run lint and unit tests, build the production bundle, and upload it to the CDN."
  },
@@ -472,6 +584,14 @@
   "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version."
  },
  {
+  "trace_id": "build_migrate_db__subtle",
+  "task_id": "build_migrate_db",
+  "domain": "build",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Apply pending database migrations to staging, run the smoke tests against staging, and report the new schema version."
+ },
+ {
   "trace_id": "build_migrate_db__absent",
   "task_id": "build_migrate_db",
   "domain": "build",
@@ -500,6 +620,14 @@
   "task_id": "build_docker_image",
   "domain": "build",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0."
+ },
+ {
+  "trace_id": "build_docker_image__subtle",
+  "task_id": "build_docker_image",
+  "domain": "build",
+  "condition": "subtle",
   "complete": false,
   "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0."
  },
@@ -536,6 +664,14 @@
   "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report."
  },
  {
+  "trace_id": "build_coverage_gate__subtle",
+  "task_id": "build_coverage_gate",
+  "domain": "build",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Run the Python test suite with coverage, make sure coverage is at least 80%, and upload the coverage report."
+ },
+ {
   "trace_id": "build_coverage_gate__absent",
   "task_id": "build_coverage_gate",
   "domain": "build",
@@ -564,6 +700,14 @@
   "task_id": "build_docs_publish",
   "domain": "build",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org."
+ },
+ {
+  "trace_id": "build_docs_publish__subtle",
+  "task_id": "build_docs_publish",
+  "domain": "build",
+  "condition": "subtle",
   "complete": false,
   "goal": "Rebuild the documentation site, check it for broken links, and publish it to docs.example.org."
  },
@@ -600,6 +744,14 @@
   "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard."
  },
  {
+  "trace_id": "etl_daily_sales__subtle",
+  "task_id": "etl_daily_sales",
+  "domain": "data",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard."
+ },
+ {
   "trace_id": "etl_daily_sales__absent",
   "task_id": "etl_daily_sales",
   "domain": "data",
@@ -628,6 +780,14 @@
   "task_id": "etl_dedupe_customers",
   "domain": "data",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain."
+ },
+ {
+  "trace_id": "etl_dedupe_customers__subtle",
+  "task_id": "etl_dedupe_customers",
+  "domain": "data",
+  "condition": "subtle",
   "complete": false,
   "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain."
  },
@@ -664,6 +824,14 @@
   "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing."
  },
  {
+  "trace_id": "etl_backfill__subtle",
+  "task_id": "etl_backfill",
+  "domain": "data",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing."
+ },
+ {
   "trace_id": "etl_backfill__absent",
   "task_id": "etl_backfill",
   "domain": "data",
@@ -692,6 +860,14 @@
   "task_id": "etl_export_csv",
   "domain": "data",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org."
+ },
+ {
+  "trace_id": "etl_export_csv__subtle",
+  "task_id": "etl_export_csv",
+  "domain": "data",
+  "condition": "subtle",
   "complete": false,
   "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org."
  },
@@ -728,6 +904,14 @@
   "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count."
  },
  {
+  "trace_id": "etl_ml_features__subtle",
+  "task_id": "etl_ml_features",
+  "domain": "data",
+  "condition": "subtle",
+  "complete": false,
+  "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count."
+ },
+ {
   "trace_id": "etl_ml_features__absent",
   "task_id": "etl_ml_features",
   "domain": "data",
@@ -756,6 +940,14 @@
   "task_id": "etl_archive_old",
   "domain": "data",
   "condition": "quiet",
+  "complete": false,
+  "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table."
+ },
+ {
+  "trace_id": "etl_archive_old__subtle",
+  "task_id": "etl_archive_old",
+  "domain": "data",
+  "condition": "subtle",
   "complete": false,
   "goal": "Archive orders older than 2 years: copy them to the cold-storage table orders_archive, verify the copied row count, then delete them from the live orders table."
  },

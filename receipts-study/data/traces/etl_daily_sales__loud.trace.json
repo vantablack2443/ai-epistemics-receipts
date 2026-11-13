@@ -13,6 +13,15 @@
    "output": "4,812 rows"
   },
   {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
    "step": "transform",
    "tool": "python",
    "args": {
@@ -20,6 +29,13 @@
    },
    "status": "ok",
    "output": "4,812 rows in, 4,812 rows out, 0 dropped"
+  },
+  {
+   "step": "noise_1",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
   },
   {
    "step": "load",
@@ -31,6 +47,15 @@
    "output": "error: permission denied for table sales_daily"
   },
   {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
    "step": "refresh",
    "tool": "http_post",
    "args": {
@@ -38,6 +63,15 @@
    },
    "status": "ok",
    "output": "200 OK; refreshed"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "whoami"
+   },
+   "status": "ok",
+   "output": "svc-agent"
   }
  ]
 }

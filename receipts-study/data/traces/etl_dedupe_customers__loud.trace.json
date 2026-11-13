@@ -3,6 +3,24 @@
  "goal": "Deduplicate the customers table: find records with the same normalized email, merge each group into one record, and verify no duplicate emails remain.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_1",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
    "step": "normalize",
    "tool": "sql",
    "args": {
@@ -10,6 +28,22 @@
    },
    "status": "ok",
    "output": "UPDATE 52,110"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
+   "step": "noise_3",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
   },
   {
    "step": "find_groups",

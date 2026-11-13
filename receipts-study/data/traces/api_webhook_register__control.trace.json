@@ -3,6 +3,13 @@
  "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
    "step": "register",
    "tool": "http_post",
    "args": {
@@ -25,6 +32,24 @@
    "output": "202 Accepted; delivery d-9921"
   },
   {
+   "step": "noise_1",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
    "step": "check_delivery",
    "tool": "http_get",
    "args": {
@@ -32,6 +57,15 @@
    },
    "status": "ok",
    "output": "200 OK; {status: 'delivered', response_code: 200}"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
   }
  ]
 }

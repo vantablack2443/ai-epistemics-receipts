@@ -1,0 +1,77 @@
+{
+ "trace_id": "etl_daily_sales__subtle",
+ "goal": "Run the daily sales ETL: extract yesterday's orders from Postgres, transform them to the reporting schema, load them into the warehouse table sales_daily, and refresh the dashboard.",
+ "entries": [
+  {
+   "step": "extract",
+   "tool": "sql",
+   "args": {
+    "db": "orders",
+    "query": "SELECT ... WHERE day = yesterday"
+   },
+   "status": "ok",
+   "output": "4,812 rows"
+  },
+  {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
+   "step": "transform",
+   "tool": "python",
+   "args": {
+    "script": "transform_sales.py"
+   },
+   "status": "ok",
+   "output": "4,812 rows in, 4,812 rows out, 0 dropped"
+  },
+  {
+   "step": "noise_1",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "load",
+   "tool": "warehouse_load",
+   "args": {
+    "table": "sales_daily"
+   },
+   "status": "ok",
+   "output": "loaded 4,812 rows into sales_daily_tmp"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "refresh",
+   "tool": "http_post",
+   "args": {
+    "url": "/dashboards/sales/refresh"
+   },
+   "status": "ok",
+   "output": "200 OK; refreshed"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "whoami"
+   },
+   "status": "ok",
+   "output": "svc-agent"
+  }
+ ]
+}

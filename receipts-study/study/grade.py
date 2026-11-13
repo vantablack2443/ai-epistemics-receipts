@@ -56,10 +56,10 @@ def main():
                    "format": r["format"], "status": status, "status_ok": status is not None,
                    "false_success": status == "COMPLETE" and not meta["complete"],
                    "false_alarm": status is not None and status != "COMPLETE" and meta["complete"]}
-            if r["format"] == "RECEIPTS":
+            if r["format"] in ("CLAIMS", "RECEIPTS"):
                 obj = parse_receipts(r["response"])
                 row["json_ok"] = obj is not None
-                if obj is not None:
+                if obj is not None and r["format"] == "RECEIPTS":
                     report = {"status": status, "claims": obj["claims"]}
                     rp = reports_dir / f"{re.sub(r'[^A-Za-z0-9._-]+', '_', r['key'])}.json"
                     rp.write_text(json.dumps(report))

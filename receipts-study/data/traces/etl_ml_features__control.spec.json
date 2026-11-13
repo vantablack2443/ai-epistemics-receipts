@@ -6,7 +6,7 @@
   },
   {
    "name": "compute",
-   "ok_pattern": "; 0 NaN columns"
+   "ok_pattern": "; 0 NaN columns$"
   },
   {
    "name": "write",

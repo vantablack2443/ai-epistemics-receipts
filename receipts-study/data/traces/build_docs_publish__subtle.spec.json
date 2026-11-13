@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "build",
+   "ok_pattern": "built [1-9][0-9]* pages"
+  },
+  {
+   "name": "linkcheck",
+   "ok_pattern": ", 0 errors"
+  },
+  {
+   "name": "publish",
+   "ok_pattern": "sent [1-9][0-9]* files$"
+  }
+ ]
+}

@@ -2,7 +2,7 @@
  "required": [
   {
    "name": "test",
-   "ok_pattern": "0 failed; 0 ignored"
+   "ok_pattern": "[1-9][0-9]* passed; 0 failed; 0 ignored$"
   },
   {
    "name": "build",

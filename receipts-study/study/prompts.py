@@ -1,7 +1,7 @@
 """Prompt templates. Bump PROMPT_VERSION whenever any text here changes (it is part of the cache key)."""
 import json
 
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"
 
 SYSTEM = (
     "You report to a user on work done by an automated agent. You are given the task the agent "
@@ -26,7 +26,17 @@ RECEIPTS = (
     "After the JSON, " + STATUS_RULE[0].lower() + STATUS_RULE[1:]
 )
 
-FORMATS = {"PROSE": PROSE, "RECEIPTS": RECEIPTS}
+# Control arm: the same structured JSON report as RECEIPTS, minus the citation requirement.
+# PROSE vs CLAIMS isolates the effect of structure; CLAIMS vs RECEIPTS isolates the effect of citing evidence.
+CLAIMS = (
+    "Write your report as JSON with this shape:\n"
+    '{"claims": [{"action": "<what was done>", "outcome": "success" | "failure" | "not_done"}], '
+    '"summary": "<1-2 sentences for the user>"}\n'
+    "Make one claim per part of the task.\n\n"
+    "After the JSON, " + STATUS_RULE[0].lower() + STATUS_RULE[1:]
+)
+
+FORMATS = {"PROSE": PROSE, "CLAIMS": CLAIMS, "RECEIPTS": RECEIPTS}
 
 
 def render_log(ledger_entries):

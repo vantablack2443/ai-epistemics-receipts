@@ -10,7 +10,7 @@
   },
   {
    "name": "publish",
-   "ok_pattern": "sent [1-9][0-9]* files"
+   "ok_pattern": "sent [1-9][0-9]* files$"
   }
  ]
 }

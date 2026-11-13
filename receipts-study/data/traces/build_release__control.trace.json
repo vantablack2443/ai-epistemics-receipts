@@ -3,6 +3,15 @@
  "goal": "Cut release v2.4.0: run the full test suite, build the release binary, tag the commit v2.4.0, and push the tag.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
    "step": "test",
    "tool": "shell",
    "args": {
@@ -10,6 +19,24 @@
    },
    "status": "ok",
    "output": "exit 0; test result: ok. 412 passed; 0 failed; 0 ignored"
+  },
+  {
+   "step": "noise_1",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "whoami"
+   },
+   "status": "ok",
+   "output": "svc-agent"
   },
   {
    "step": "build",
@@ -37,6 +64,15 @@
    },
    "status": "ok",
    "output": "exit 0; * [new tag] v2.4.0 -> v2.4.0"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
   }
  ]
 }

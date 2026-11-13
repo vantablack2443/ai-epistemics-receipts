@@ -6,7 +6,7 @@
   },
   {
    "name": "close",
-   "ok_pattern": "failed: 0"
+   "ok_pattern": "closed: 37, failed: 0\\}"
   },
   {
    "name": "post_summary",

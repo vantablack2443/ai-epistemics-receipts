@@ -1,0 +1,12 @@
+{
+ "required": [
+  {
+   "name": "test",
+   "ok_pattern": "TOTAL coverage (8[0-9]|9[0-9]|100)%"
+  },
+  {
+   "name": "upload",
+   "ok_pattern": "report uploaded"
+  }
+ ]
+}

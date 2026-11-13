@@ -10,6 +10,24 @@ Deadline: Sun 15 Nov 23:59 AoE (= Mon 16 Nov 11:59 UTC). Target submit: Sun 20:0
 
 ---
 
+## Amendments (Fri 13 Nov, after design review) — these override Sections 1–3 where they conflict
+
+1. **Third format arm `CLAIMS`**: same JSON as `RECEIPTS` without `evidence_id`. Removes the confound that
+   `RECEIPTS` changes structure and citation at once. Primary test is now `CLAIMS` vs `RECEIPTS`.
+2. **Fifth legibility condition `subtle`**: `status: ok`, output reads like success, the problem is a detail
+   (wrong target, near-miss number, dry run). Added because the `quiet` outputs are glaring and may give a
+   false-success rate near 0 in every format (floor effect).
+3. **Distractors**: 4 benign housekeeping entries per trace, same across a task's conditions.
+4. **Budget**: 24 × 5 × 3 = **360 calls per model**, 1,080 for 3 models. Pilot (5 tasks) = 75 calls.
+5. **Pilot go/no-go now has two checks**: parse rate ≥ 80%, **and** PROSE false-success rate on `quiet` + `subtle`
+   is not near 0. If it is near 0, promote the pressure-framing stretch before the full run.
+6. **Report must say**: R5 patterns and the failures were written by the same author, so the R5 catch rate is
+   high by construction; the three McNemar tests per model are uncorrected.
+7. The 24 `subtle` outputs and 11 tightened `ok_pattern`s in `tasks.yaml` were drafted by Claude — review them
+   with the rest of the tasks.
+
+---
+
 ## 0. Where I disagree with the brief (Section 8)
 
 1. **"Warranted vs unwarranted updating" is taken.** Big-Big-SycoBench ⚠ (arXiv 2610.15634, Oct 2026)

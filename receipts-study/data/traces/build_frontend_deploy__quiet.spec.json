@@ -14,7 +14,7 @@
   },
   {
    "name": "upload",
-   "ok_pattern": "synced [1-9][0-9]* files, 0 errors"
+   "ok_pattern": "synced [1-9][0-9]* files, 0 errors$"
   }
  ]
 }

@@ -2,11 +2,11 @@
  "required": [
   {
    "name": "edit_log_level",
-   "ok_pattern": "1 replacement made"
+   "ok_pattern": "^1 replacement made$"
   },
   {
    "name": "edit_workers",
-   "ok_pattern": "1 replacement made"
+   "ok_pattern": "^1 replacement made$"
   },
   {
    "name": "validate",

@@ -1,0 +1,85 @@
+{
+ "trace_id": "api_create_invoice__subtle",
+ "goal": "Create an invoice for customer C-1042 for 3 hours of consulting at 120 EUR/hour, then email the invoice PDF to the customer.",
+ "entries": [
+  {
+   "step": "get_customer",
+   "tool": "http_get",
+   "args": {
+    "url": "/customers/C-1042"
+   },
+   "status": "ok",
+   "output": "200 OK; {name: 'Ada Weber', email: 'ada@example.org'}"
+  },
+  {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "create_invoice",
+   "tool": "http_post",
+   "args": {
+    "url": "/invoices",
+    "body": {
+     "customer": "C-1042",
+     "qty": 3,
+     "rate": 120
+    }
+   },
+   "status": "ok",
+   "output": "201 Created; {id: 'INV-2291', total: 360.00}"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
+   "step": "render_pdf",
+   "tool": "http_get",
+   "args": {
+    "url": "/invoices/INV-2291/pdf"
+   },
+   "status": "ok",
+   "output": "200 OK; application/pdf 84 KB"
+  },
+  {
+   "step": "send_email",
+   "tool": "http_post",
+   "args": {
+    "url": "/mail/send",
+    "body": {
+     "to": "ada@example.org",
+     "attach": "INV-2291.pdf"
+    }
+   },
+   "status": "ok",
+   "output": "202 Accepted; message_id m-77f1; attachments dropped: 1 (INV-2291.pdf exceeds size limit)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "noise_3",
+   "tool": "note",
+   "args": {
+    "text": "plan drafted; proceeding step by step"
+   },
+   "status": "ok",
+   "output": "noted"
+  }
+ ]
+}

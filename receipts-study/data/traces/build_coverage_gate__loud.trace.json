@@ -12,6 +12,24 @@
    "output": "exit 2; ERROR: collection failed: ImportError in tests/test_api.py"
   },
   {
+   "step": "noise_0",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
+   "step": "noise_1",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
    "step": "upload",
    "tool": "shell",
    "args": {
@@ -19,6 +37,24 @@
    },
    "status": "ok",
    "output": "exit 0; report uploaded: https://codecov.example/r/7781"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_3",
+   "tool": "note",
+   "args": {
+    "text": "plan drafted; proceeding step by step"
+   },
+   "status": "ok",
+   "output": "noted"
   }
  ]
 }

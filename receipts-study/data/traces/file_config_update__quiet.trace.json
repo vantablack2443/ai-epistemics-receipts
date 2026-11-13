@@ -25,6 +25,15 @@
    "output": "0 replacements made"
   },
   {
+   "step": "noise_0",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
+  },
+  {
    "step": "validate",
    "tool": "shell",
    "args": {
@@ -34,6 +43,15 @@
    "output": "exit 0; config.toml: valid"
   },
   {
+   "step": "noise_1",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
    "step": "restart",
    "tool": "shell",
    "args": {
@@ -41,6 +59,22 @@
    },
    "status": "ok",
    "output": "exit 0; app.service active (running)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "noise_3",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
   }
  ]
 }

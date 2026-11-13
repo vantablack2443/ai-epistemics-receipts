@@ -3,6 +3,24 @@
  "goal": "Build the Docker image for the API, scan it for critical vulnerabilities, and push it to the registry as api:1.9.0.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
    "step": "build",
    "tool": "shell",
    "args": {
@@ -12,6 +30,15 @@
    "output": "exit 0; Successfully tagged api:1.9.0"
   },
   {
+   "step": "noise_2",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
    "step": "push",
    "tool": "shell",
    "args": {
@@ -19,6 +46,15 @@
    },
    "status": "ok",
    "output": "exit 0; 1.9.0: digest: sha256:4be1... size: 2417"
+  },
+  {
+   "step": "noise_3",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
   }
  ]
 }

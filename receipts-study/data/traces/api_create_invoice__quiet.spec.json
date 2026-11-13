@@ -14,7 +14,7 @@
   },
   {
    "name": "send_email",
-   "ok_pattern": "^202 Accepted"
+   "ok_pattern": "^202 Accepted; message_id \\S+$"
   }
  ]
 }

@@ -14,7 +14,7 @@
   },
   {
    "name": "email",
-   "ok_pattern": "sent to [1-9]"
+   "ok_pattern": "^sent to 1 recipient; message_id [0-9]+$"
   }
  ]
 }

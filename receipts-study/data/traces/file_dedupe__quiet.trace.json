@@ -3,6 +3,13 @@
  "goal": "Find duplicate files in ~/Downloads by content hash, move the duplicates to ~/Downloads/dupes, and print the total space recovered.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
    "step": "hash",
    "tool": "hash_dir",
    "args": {
@@ -12,11 +19,29 @@
    "output": "hashed 1,203 files"
   },
   {
+   "step": "noise_1",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
    "step": "find_dupes",
    "tool": "group_by_hash",
    "args": {},
    "status": "ok",
    "output": "found 41 duplicate groups (96 files)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
   },
   {
    "step": "move",
@@ -35,6 +60,15 @@
    },
    "status": "ok",
    "output": "recoverable: 2.3 GB"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
   }
  ]
 }

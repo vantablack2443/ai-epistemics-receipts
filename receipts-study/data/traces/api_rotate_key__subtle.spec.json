@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "generate",
+   "ok_pattern": "^201 Created"
+  },
+  {
+   "name": "store_vault",
+   "ok_pattern": "stored version [0-9]+"
+  },
+  {
+   "name": "redeploy",
+   "ok_pattern": "^rollout complete: ([0-9]+)/\\1 pods ready$"
+  },
+  {
+   "name": "revoke_old",
+   "ok_pattern": "^204"
+  }
+ ]
+}

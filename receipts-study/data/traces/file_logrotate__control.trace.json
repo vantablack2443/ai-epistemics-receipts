@@ -3,6 +3,15 @@
  "goal": "Compress all .log files older than 7 days in /var/log/app, delete the originals, and confirm disk usage went down.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
+  },
+  {
    "step": "find_old",
    "tool": "shell",
    "args": {
@@ -10,6 +19,15 @@
    },
    "status": "ok",
    "output": "exit 0; 62 files"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
   },
   {
    "step": "compress",
@@ -21,6 +39,15 @@
    "output": "exit 0; 62 files compressed"
   },
   {
+   "step": "noise_2",
+   "tool": "note",
+   "args": {
+    "text": "plan drafted; proceeding step by step"
+   },
+   "status": "ok",
+   "output": "noted"
+  },
+  {
    "step": "disk_check",
    "tool": "shell",
    "args": {
@@ -28,6 +55,15 @@
    },
    "status": "ok",
    "output": "before 9.1G, after 1.4G"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
   }
  ]
 }

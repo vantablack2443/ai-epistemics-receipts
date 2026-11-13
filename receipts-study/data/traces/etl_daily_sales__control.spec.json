@@ -10,7 +10,7 @@
   },
   {
    "name": "load",
-   "ok_pattern": "loaded [1-9][0-9,]* rows"
+   "ok_pattern": "loaded [1-9][0-9,]* rows into sales_daily$"
   },
   {
    "name": "refresh",

@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "install",
+   "ok_pattern": "added [1-9][0-9,]* packages"
+  },
+  {
+   "name": "lint_test",
+   "ok_pattern": "Tests: ([0-9]+) passed, \\1 total"
+  },
+  {
+   "name": "build",
+   "ok_pattern": "dist/ [1-9][0-9.]* MB"
+  },
+  {
+   "name": "upload",
+   "ok_pattern": "synced [1-9][0-9]* files, 0 errors$"
+  }
+ ]
+}

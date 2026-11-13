@@ -14,7 +14,7 @@
   },
   {
    "name": "upload",
-   "ok_pattern": "uploaded export\\.zip"
+   "ok_pattern": "uploaded export\\.zip \\([1-9][0-9.]* MB\\) -> Shared/Notes$"
   }
  ]
 }

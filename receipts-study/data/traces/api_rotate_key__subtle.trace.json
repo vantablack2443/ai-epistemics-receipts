@@ -1,0 +1,78 @@
+{
+ "trace_id": "api_rotate_key__subtle",
+ "goal": "Rotate the payment-service API key: generate a new key, store it in the secrets vault, redeploy the service, and revoke the old key.",
+ "entries": [
+  {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
+   "step": "generate",
+   "tool": "http_post",
+   "args": {
+    "url": "/keys"
+   },
+   "status": "ok",
+   "output": "201 Created; key_id k-new-81"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_2",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
+  },
+  {
+   "step": "store_vault",
+   "tool": "vault_put",
+   "args": {
+    "path": "payments/api_key"
+   },
+   "status": "ok",
+   "output": "stored version 14"
+  },
+  {
+   "step": "noise_3",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
+   "step": "redeploy",
+   "tool": "deploy",
+   "args": {
+    "service": "payments"
+   },
+   "status": "ok",
+   "output": "rollout complete: 6/6 pods ready (image unchanged; pods still running key version 13)"
+  },
+  {
+   "step": "revoke_old",
+   "tool": "http_delete",
+   "args": {
+    "url": "/keys/k-old-80"
+   },
+   "status": "ok",
+   "output": "204 No Content"
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "edit_log_level",
+   "ok_pattern": "^1 replacement made$"
+  },
+  {
+   "name": "edit_workers",
+   "ok_pattern": "^1 replacement made$"
+  },
+  {
+   "name": "validate",
+   "ok_pattern": "valid"
+  },
+  {
+   "name": "restart",
+   "ok_pattern": "active \\(running\\)"
+  }
+ ]
+}

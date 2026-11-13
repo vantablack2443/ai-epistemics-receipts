@@ -1,0 +1,16 @@
+{
+ "required": [
+  {
+   "name": "list_raw",
+   "ok_pattern": "744 objects"
+  },
+  {
+   "name": "backfill",
+   "ok_pattern": "744/744 partitions"
+  },
+  {
+   "name": "gap_check",
+   "ok_pattern": "^0 missing hours"
+  }
+ ]
+}

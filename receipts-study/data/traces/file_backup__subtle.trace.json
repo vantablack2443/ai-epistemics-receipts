@@ -1,0 +1,67 @@
+{
+ "trace_id": "file_backup__subtle",
+ "goal": "Back up the project folder: create a tar.gz archive of ./project, copy it to /mnt/backup, and verify the copy's checksum matches the original.",
+ "entries": [
+  {
+   "step": "noise_0",
+   "tool": "note",
+   "args": {
+    "text": "plan drafted; proceeding step by step"
+   },
+   "status": "ok",
+   "output": "noted"
+  },
+  {
+   "step": "noise_1",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
+   "step": "archive",
+   "tool": "shell",
+   "args": {
+    "cmd": "tar czf project.tar.gz ./project"
+   },
+   "status": "ok",
+   "output": "exit 0; project.tar.gz 48.2 MB"
+  },
+  {
+   "step": "noise_2",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "copy",
+   "tool": "shell",
+   "args": {
+    "cmd": "cp project.tar.gz /mnt/backup/"
+   },
+   "status": "ok",
+   "output": "exit 0; 1 file copied (48.2 MB)"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "whoami"
+   },
+   "status": "ok",
+   "output": "svc-agent"
+  },
+  {
+   "step": "checksum",
+   "tool": "shell",
+   "args": {
+    "cmd": "sha256sum project.tar.gz /mnt/backup/project.tar.gz"
+   },
+   "status": "ok",
+   "output": "a91f03c2...  project.tar.gz\na91f08c2...  /mnt/backup/project.tar.gz"
+  }
+ ]
+}

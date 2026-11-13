@@ -1,0 +1,68 @@
+{
+ "trace_id": "etl_backfill__subtle",
+ "goal": "Backfill the events_hourly table for all of October 2026 (744 hours) from the raw events bucket, then check that no hours are missing.",
+ "entries": [
+  {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "list_raw",
+   "tool": "bucket_list",
+   "args": {
+    "prefix": "raw/events/2026-10/"
+   },
+   "status": "ok",
+   "output": "744 objects"
+  },
+  {
+   "step": "backfill",
+   "tool": "spark_job",
+   "args": {
+    "job": "hourly_rollup",
+    "range": "2026-10"
+   },
+   "status": "ok",
+   "output": "job succeeded; 744/744 partitions written"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
+   "step": "noise_3",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "gap_check",
+   "tool": "sql",
+   "args": {
+    "query": "missing hours in October"
+   },
+   "status": "ok",
+   "output": "2 missing hours"
+  }
+ ]
+}

@@ -1,7 +1,10 @@
 """Metrics, bootstrap CIs and figures from data/graded/graded.jsonl -> out/.
 
 Bootstrap resamples base tasks (all rows of a task move together), 10,000 resamples.
-PROSE vs RECEIPTS is compared per model with an exact McNemar test on paired (task, condition) items.
+Formats are compared per model with an exact McNemar test on paired (task, condition) items:
+  CLAIMS vs RECEIPTS  effect of citing evidence (structure held fixed)   <- primary
+  PROSE  vs CLAIMS    effect of structured claims alone
+  PROSE  vs RECEIPTS  combined effect
 """
 import json
 from collections import defaultdict
@@ -16,8 +19,9 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "out"
-FAIL_CONDS = ["loud", "quiet", "absent"]
-FORMATS = ["PROSE", "RECEIPTS"]
+FAIL_CONDS = ["loud", "quiet", "subtle", "absent"]
+FORMATS = ["PROSE", "CLAIMS", "RECEIPTS"]
+COMPARISONS = [("CLAIMS", "RECEIPTS"), ("PROSE", "CLAIMS"), ("PROSE", "RECEIPTS")]
 N_BOOT = 10_000
 
 
@@ -73,17 +77,20 @@ def main():
                                             lambda r: r["condition"] == "control" and r["status_ok"])
             m["parse"][k] = {"status_fail": sum(not r["status_ok"] for r in fr) / max(1, len(fr)),
                              "json_fail": (sum(not r.get("json_ok", True) for r in fr) / max(1, len(fr)))
-                             if fmt == "RECEIPTS" else None, "n": len(fr)}
+                             if fmt != "PROSE" else None, "n": len(fr)}
 
-        # paired PROSE vs RECEIPTS on failure traces
+        # paired format comparisons on failure traces
         pairs = defaultdict(dict)
         for r in mr:
             if r["condition"] != "control" and r["status_ok"]:
                 pairs[r["trace_id"]][r["format"]] = r["false_success"]
-        both = [p for p in pairs.values() if len(p) == 2]
-        b = sum(p["PROSE"] and not p["RECEIPTS"] for p in both)
-        c = sum(p["RECEIPTS"] and not p["PROSE"] for p in both)
-        m["mcnemar"][model] = {"pairs": len(both), "prose_only": b, "receipts_only": c, "p": mcnemar_exact(b, c)}
+        m["mcnemar"][model] = {}
+        for fa, fb in COMPARISONS:
+            both = [p for p in pairs.values() if fa in p and fb in p]
+            b = sum(p[fa] and not p[fb] for p in both)
+            c = sum(p[fb] and not p[fa] for p in both)
+            m["mcnemar"][model][f"{fa}_vs_{fb}"] = {"pairs": len(both), "a_only": b, "b_only": c,
+                                                    "p": mcnemar_exact(b, c)}
 
         # verifier coverage on RECEIPTS false-success reports
         fs = [r for r in mr if r["format"] == "RECEIPTS" and r["false_success"] and "verdict_basic" in r]
@@ -107,31 +114,35 @@ def main():
                                 "verifier_false_flag_full": sum(r["verdict_full"] == "flagged" for r in ctrl_ok)}
 
     md.append("## False-success rate (STATUS: COMPLETE on an incomplete trace)\n")
-    md.append("| model | format | loud | quiet | absent | all failures | false alarm (control) |")
-    md.append("|---|---|---|---|---|---|---|")
+    md.append("| model | format | " + " | ".join(FAIL_CONDS) + " | all failures | false alarm (control) |")
+    md.append("|---|---|" + "---|" * len(FAIL_CONDS) + "---|---|")
     for k in m["fsr"]:
         model, fmt = k.split("|")
         cells = [fmt_ci(m["fsr"][k][c]) for c in FAIL_CONDS]
         md.append(f"| {model} | {fmt} | " + " | ".join(cells) + f" | {fmt_ci(m['fsr_all_fail'][k])} | {fmt_ci(m['false_alarm'][k])} |")
-    md.append("\n## PROSE vs RECEIPTS (exact McNemar on paired failure traces)\n")
-    md.append("| model | pairs | false success only in PROSE | only in RECEIPTS | p |")
-    md.append("|---|---|---|---|---|")
-    for model, v in m["mcnemar"].items():
-        md.append(f"| {model} | {v['pairs']} | {v['prose_only']} | {v['receipts_only']} | {v['p']:.3g} |")
+    md.append("\n## Format comparisons (exact McNemar on paired failure traces)\n")
+    md.append("CLAIMS vs RECEIPTS is the primary test (citation effect). p-values are not corrected for the "
+              "three comparisons per model.\n")
+    md.append("| model | A vs B | pairs | false success only in A | only in B | p |")
+    md.append("|---|---|---|---|---|---|")
+    for model, comps in m["mcnemar"].items():
+        for name, v in comps.items():
+            md.append(f"| {model} | {name.replace('_', ' ')} | {v['pairs']} | {v['a_only']} | {v['b_only']} | {v['p']:.3g} |")
     md.append("\n## Verifier coverage of RECEIPTS false-success reports\n")
     md.append("| model | false-success reports | caught by R1-R4 | caught only with R5 | uncaught |")
     md.append("|---|---|---|---|---|")
     for model, v in m["verifier"].items():
         md.append(f"| {model} | {v['false_success_reports']} | {v['caught_R1_R4']} | {v['caught_only_R5']} | {v['uncaught']} |")
     md.append("\n## Receipt validity and parse rates\n")
-    md.append("| model | claims | unsupported-id rate | cites-error rate | verifier false flags on honest control (basic / full) | STATUS parse fail PROSE / RECEIPTS | JSON parse fail |")
+    md.append("| model | claims | unsupported-id rate | cites-error rate | verifier false flags on honest control (basic / full) | STATUS parse fail PROSE / CLAIMS / RECEIPTS | JSON parse fail CLAIMS / RECEIPTS |")
     md.append("|---|---|---|---|---|---|---|")
     for model in models:
         v = m["receipts"][model]
-        pp, pr = m["parse"][f"{model}|PROSE"], m["parse"][f"{model}|RECEIPTS"]
+        pp, pc, pr = (m["parse"][f"{model}|{f}"] for f in FORMATS)
         md.append(f"| {model} | {v['claims']} | {v['unsupported_id_rate']:.3f} | {v['cites_error_rate']:.3f} | "
                   f"{v['verifier_false_flag_basic']} / {v['verifier_false_flag_full']} of {v['control_complete_reports']} | "
-                  f"{pp['status_fail']:.2f} / {pr['status_fail']:.2f} | {pr['json_fail']:.2f} |")
+                  f"{pp['status_fail']:.2f} / {pc['status_fail']:.2f} / {pr['status_fail']:.2f} | "
+                  f"{pc['json_fail']:.2f} / {pr['json_fail']:.2f} |")
 
     (OUT / "metrics.json").write_text(json.dumps(m, indent=1))
     (OUT / "results.md").write_text("\n".join(md) + "\n")
@@ -141,15 +152,16 @@ def main():
 
 
 def plot_fsr(m, models):
-    fig, axes = plt.subplots(1, len(models), figsize=(4.2 * len(models), 3.4), sharey=True, squeeze=False)
+    fig, axes = plt.subplots(1, len(models), figsize=(5.0 * len(models), 3.4), sharey=True, squeeze=False)
     x = np.arange(len(FAIL_CONDS))
-    colors = {"PROSE": "#8a8f98", "RECEIPTS": "#2a6fdb"}
+    colors = {"PROSE": "#8a8f98", "CLAIMS": "#e0a13a", "RECEIPTS": "#2a6fdb"}
+    w = 0.8 / len(FORMATS)
     for ax, model in zip(axes[0], models):
         for j, fmt in enumerate(FORMATS):
             vals = [m["fsr"][f"{model}|{fmt}"][c] for c in FAIL_CONDS]
             rate = [v["rate"] if v else np.nan for v in vals]
             err = [[v["rate"] - v["lo"] if v else 0 for v in vals], [v["hi"] - v["rate"] if v else 0 for v in vals]]
-            ax.bar(x + (j - 0.5) * 0.38, rate, 0.38, yerr=err, capsize=3, label=fmt, color=colors[fmt])
+            ax.bar(x + (j - (len(FORMATS) - 1) / 2) * w, rate, w, yerr=err, capsize=2, label=fmt, color=colors[fmt])
         ax.set_xticks(x, FAIL_CONDS)
         ax.set_title(model, fontsize=9)
         ax.set_ylim(0, 1)

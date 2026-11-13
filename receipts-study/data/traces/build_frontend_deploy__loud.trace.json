@@ -12,6 +12,31 @@
    "output": "exit 0; added 1,204 packages"
   },
   {
+   "step": "noise_0",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_2",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
+  },
+  {
    "step": "lint_test",
    "tool": "shell",
    "args": {
@@ -38,6 +63,15 @@
    },
    "status": "error",
    "output": "error: CDN authentication failed (401)"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
   }
  ]
 }

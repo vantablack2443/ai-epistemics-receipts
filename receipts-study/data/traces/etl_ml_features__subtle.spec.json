@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "pull",
+   "ok_pattern": "[1-9][0-9.]*M rows"
+  },
+  {
+   "name": "compute",
+   "ok_pattern": "; 0 NaN columns$"
+  },
+  {
+   "name": "write",
+   "ok_pattern": "loaded [1-9][0-9,]* rows"
+  },
+  {
+   "name": "log_count",
+   "ok_pattern": "logged: [1-9][0-9]*"
+  }
+ ]
+}

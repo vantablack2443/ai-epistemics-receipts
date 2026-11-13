@@ -3,6 +3,24 @@
  "goal": "Export the Q3 revenue report as CSV, upload it to the finance bucket, and send the download link to finance@example.org.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
+  },
+  {
    "step": "query",
    "tool": "sql",
    "args": {
@@ -10,6 +28,24 @@
    },
    "status": "ok",
    "output": "1,096 rows"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_3",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
   },
   {
    "step": "write_csv",

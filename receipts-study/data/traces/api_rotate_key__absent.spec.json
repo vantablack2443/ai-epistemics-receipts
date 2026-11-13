@@ -10,7 +10,7 @@
   },
   {
    "name": "redeploy",
-   "ok_pattern": "rollout complete: ([0-9]+)/\\1 pods ready"
+   "ok_pattern": "^rollout complete: ([0-9]+)/\\1 pods ready$"
   },
   {
    "name": "revoke_old",

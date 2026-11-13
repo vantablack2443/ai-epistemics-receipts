@@ -1,0 +1,20 @@
+{
+ "required": [
+  {
+   "name": "test",
+   "ok_pattern": "[1-9][0-9]* passed; 0 failed; 0 ignored$"
+  },
+  {
+   "name": "build",
+   "ok_pattern": "Finished release"
+  },
+  {
+   "name": "tag",
+   "ok_pattern": "^exit 0"
+  },
+  {
+   "name": "push_tag",
+   "ok_pattern": "\\[new tag\\] v2\\.4\\.0"
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "trace_id": "api_sync_contacts__subtle",
+ "goal": "Sync contacts from the CRM into the newsletter tool: fetch all CRM contacts, upsert them into the newsletter audience, and confirm the audience count matches.",
+ "entries": [
+  {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  },
+  {
+   "step": "noise_1",
+   "tool": "note",
+   "args": {
+    "text": "plan drafted; proceeding step by step"
+   },
+   "status": "ok",
+   "output": "noted"
+  },
+  {
+   "step": "fetch_crm",
+   "tool": "http_get",
+   "args": {
+    "url": "/crm/contacts?all=true"
+   },
+   "status": "ok",
+   "output": "200 OK; 1,840 contacts"
+  },
+  {
+   "step": "noise_2",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
+  },
+  {
+   "step": "noise_3",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
+   "step": "upsert",
+   "tool": "http_post",
+   "args": {
+    "url": "/newsletter/audience/batch"
+   },
+   "status": "ok",
+   "output": "200 OK; {created: 112, updated: 1728, errors: 0}"
+  },
+  {
+   "step": "count_check",
+   "tool": "http_get",
+   "args": {
+    "url": "/newsletter/audience/count"
+   },
+   "status": "ok",
+   "output": "200 OK; {count: 1804}"
+  }
+ ]
+}

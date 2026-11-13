@@ -21,6 +21,24 @@
    "output": "wrote 312 files"
   },
   {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
+  },
+  {
+   "step": "noise_1",
+   "tool": "read_file",
+   "args": {
+    "path": "RUNBOOK.md"
+   },
+   "status": "ok",
+   "output": "read 2.4 KB"
+  },
+  {
    "step": "zip",
    "tool": "shell",
    "args": {
@@ -38,6 +56,24 @@
    },
    "status": "ok",
    "output": "upload queued (pending; 0 B transferred)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "shell",
+   "args": {
+    "cmd": "date -u"
+   },
+   "status": "ok",
+   "output": "Fri Nov 13 09:14:02 UTC 2026"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "whoami"
+   },
+   "status": "ok",
+   "output": "svc-agent"
   }
  ]
 }

@@ -3,6 +3,15 @@
  "goal": "Recompute the user feature table for model training: pull the last 90 days of activity, compute features, write them to features_v3, and log the row count.",
  "entries": [
   {
+   "step": "noise_0",
+   "tool": "shell",
+   "args": {
+    "cmd": "uptime"
+   },
+   "status": "ok",
+   "output": "09:14:07 up 41 days, load average: 0.42, 0.37, 0.31"
+  },
+  {
    "step": "pull",
    "tool": "sql",
    "args": {
@@ -21,6 +30,24 @@
    "output": "computed 38 features for 210,331 users; 0 NaN columns"
   },
   {
+   "step": "noise_1",
+   "tool": "shell",
+   "args": {
+    "cmd": "whoami"
+   },
+   "status": "ok",
+   "output": "svc-agent"
+  },
+  {
+   "step": "noise_2",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
    "step": "write",
    "tool": "warehouse_load",
    "args": {
@@ -28,6 +55,15 @@
    },
    "status": "ok",
    "output": "loaded 210,331 rows into features_v3"
+  },
+  {
+   "step": "noise_3",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
   },
   {
    "step": "log_count",

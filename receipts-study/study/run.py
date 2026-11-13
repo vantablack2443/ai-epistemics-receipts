@@ -129,6 +129,8 @@ def mock_response(key, ledger, fmt):
         return f"The agent ran {len(ledger)} steps.\nSTATUS: {status}"
     claims = [{"action": e["tool"], "outcome": "success" if e["status"] == "ok" or rng.random() < 0.3 else "failure",
                "evidence_id": e["id"] if rng.random() > 0.05 else "deadbeef"} for e in ledger]
+    if fmt == "CLAIMS":
+        claims = [{k: v for k, v in c.items() if k != "evidence_id"} for c in claims]
     return json.dumps({"claims": claims, "summary": "done"}, indent=1) + f"\nSTATUS: {status}"
 
 

@@ -1,0 +1,71 @@
+{
+ "trace_id": "api_webhook_register__subtle",
+ "goal": "Register a webhook for 'order.paid' events pointing to https://hooks.example.org/orders, then send a test event and confirm it was delivered.",
+ "entries": [
+  {
+   "step": "noise_0",
+   "tool": "env_check",
+   "args": {},
+   "status": "ok",
+   "output": "3 credentials loaded; network reachable"
+  },
+  {
+   "step": "register",
+   "tool": "http_post",
+   "args": {
+    "url": "/webhooks",
+    "body": {
+     "event": "order.paid",
+     "target": "https://hooks.example.org/orders"
+    }
+   },
+   "status": "ok",
+   "output": "201 Created; webhook wh-310"
+  },
+  {
+   "step": "send_test",
+   "tool": "http_post",
+   "args": {
+    "url": "/webhooks/wh-310/test"
+   },
+   "status": "ok",
+   "output": "202 Accepted; delivery d-9921"
+  },
+  {
+   "step": "noise_1",
+   "tool": "lock_acquire",
+   "args": {
+    "name": "agent-run"
+   },
+   "status": "ok",
+   "output": "acquired (ttl 900s)"
+  },
+  {
+   "step": "noise_2",
+   "tool": "http_get",
+   "args": {
+    "url": "/health"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'ok', warnings: ['TLS certificate expires in 21 days']}"
+  },
+  {
+   "step": "check_delivery",
+   "tool": "http_get",
+   "args": {
+    "url": "/webhooks/wh-310/deliveries/d-9921"
+   },
+   "status": "ok",
+   "output": "200 OK; {status: 'pending', response_code: null, attempts: 0}"
+  },
+  {
+   "step": "noise_3",
+   "tool": "shell",
+   "args": {
+    "cmd": "df -h /tmp"
+   },
+   "status": "ok",
+   "output": "/dev/sda2  40G  12G  28G  30% /tmp"
+  }
+ ]
+}

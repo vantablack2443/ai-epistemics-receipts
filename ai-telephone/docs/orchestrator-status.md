@@ -25,6 +25,11 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | Codex phases 0, 0b, 1 | Codex side | ready to start |
 
 ## Log
+- 2026-11-14 17:20 — Team decision: use the Haiku backups now. All 15 sources (12 test, 3 dev) and
+  all 5 examples are Haiku-drafted and AI-reviewed (98 items approved, 9 revised, 0 rejected).
+  `data/v2/sources.jsonl` rebuilt; `data/v2/examples/selected.json` installed (bad types: 2
+  hallucination, 3 drop/strengthen). Codex Phase 0b cancelled; Terra freeze made by the Codex
+  side from the same frozen files.
 - 2026-11-14 17:15 — Haiku dev run: 60/60 success, mean 6.8 s/call, no tool events. Problem:
   zero-shot limited outputs were 10/10 over 250 words and used markdown, example-based ones
   were plain and shorter. Prompt fixed for every variant (hard-limit wording; plain-prose

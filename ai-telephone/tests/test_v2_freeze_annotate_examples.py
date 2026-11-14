@@ -191,9 +191,10 @@ def test_selected_examples_drive_render_and_prompt(tmp_path, monkeypatch):
     assert render_examples('one', path=path) == expected_block(one)
     assert render_examples('few', path=path) == expected_block(few)
     assert 'haiku run 1' not in render_examples('few', path=path)  # provenance is not shown to the summarizer
-    # make_prompt_v2 reads the default location; point that at the temporary file
+    # make_prompt_v2 reads the default location (SELECTED_PATH, the real file); redirect every
+    # load_selected call, whatever path it is given, to the temporary file
     real = se.load_selected
-    monkeypatch.setattr(se, 'load_selected', lambda path=se.SELECTED_PATH: real(path))
+    monkeypatch.setattr(se, 'load_selected', lambda *args, **kwargs: real(path))
     prompt = make_prompt_v2('SOURCE', 'few', 'free')
     assert expected_block(few) in prompt and prompt.endswith('Text to summarize:\nSOURCE')
 

@@ -25,14 +25,15 @@ hallucination across 1, 3, and 5 rounds — with and without a length limit?
 |---|---|---|
 | Summarizer under test | `claude-haiku-5-5` via Claude Code (optional third: `gemini-3.8-flash-low`, run by the team member themself, never by agents) | `gpt-6.1-terra` via Codex |
 | Agent that builds code, merges CSVs, runs exports | Claude Code on Haiku (`claude-haiku-5-5`) | Codex on Terra (`gpt-6.1-terra`) |
-| Drafts long sources (same brief: `docs/source-brief.md`) | Haiku: `long-01`–`long-06`, `dev-long-01`, `dev-long-02` | Terra: `long-07`–`long-12`, `dev-long-03` |
-| Builds prompt examples (`docs/examples-brief.md`) | Haiku: example sources E1–E3; candidate summaries for all 5 | Terra: example sources E4–E5; candidate summaries for all 5 |
+| Drafts long sources (`docs/source-brief.md`) | **All 15 by Haiku** (team decision 17:20: the Terra-drafted half was replaced by Haiku backups to avoid waiting) | none |
+| Builds prompt examples (`docs/examples-brief.md`) | **All 5 (E1–E5) by Haiku**: sources, candidates, AI selection | none |
 | AI annotator (grader) | `claude-opus-5-5` via Claude Code, the only annotator, for all models | — |
 | Human work | source review, example selection, freeze sign-off, audit labels | same |
 
-The annotator is never a summarizer under test. Splitting source drafting and example
-generation between Haiku and Terra balances any advantage a model may have on its own
-writing; the analysis reports results separately for Haiku-drafted and Terra-drafted sources.
+The annotator is never a summarizer under test. All sources and examples were drafted by Haiku (the planned Haiku/Terra split was dropped to
+keep the schedule), so Haiku may have an advantage on text in its own style; the report states
+this as a limitation. Source review and example selection were done by AI agents (Haiku),
+verified by the orchestrator, not by humans.
 
 Each round sees only the previous round's output, never the original. The original is never
 restored. Ground truth never enters a summarizer prompt.

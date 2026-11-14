@@ -1,5 +1,72 @@
 """Small, explicit document-level analysis primitives. Missing values stay missing."""
 import numpy as np
+import json
+
+LABELS = ('preserved', 'omitted', 'strengthened', 'weakened', 'contradicted')
+PROMPTS = ('zero', 'one', 'few')
+LENGTHS = ('limited', 'free')
+SCORED_ROUNDS = (1, 3, 5)
+CONTRASTS = (('few', 'zero'), ('one', 'zero'), ('few', 'one'))
+
+def load_jsonl(path):
+    records = []
+    with open(path, encoding='utf-8-sig') as stream:
+        for number, line in enumerate(stream, 1):
+            if line.strip():
+                try:
+                    records.append(json.loads(line))
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f'{path}: invalid JSON on line {number}') from exc
+    return records
+
+def parse_generation_id(generation_id):
+    document, prompt, length, round_part = generation_id.rsplit('-', 3)
+    if not round_part.startswith('r'):
+        raise ValueError('invalid round')
+    return document, prompt, length, int(round_part[1:])
+
+def test_documents(sources):
+    return {d['id']: [i['id'] for i in d['items']] for d in sources if d['split'] == 'test'}
+
+def summary_rates(generations, annotations, documents):
+    lookup = {}
+    for annotation in annotations:
+        gid = annotation['generation_id']
+        if gid in lookup:
+            raise ValueError(f'duplicate annotation {gid}')
+        lookup[gid] = annotation
+    rows = []
+    seen = set()
+    for generation in generations:
+        gid = generation['generation_id']
+        if gid in seen:
+            raise ValueError(f'duplicate generation {gid}')
+        seen.add(gid)
+        doc = generation['document_id']
+        if doc not in documents or generation['round'] not in SCORED_ROUNDS:
+            continue
+        annotation = lookup.get(gid)
+        labels = {x['item_id']: x['label'] for x in annotation['labels']} if annotation else {}
+        complete = generation['status'] == 'success' and bool(documents[doc]) and all(i in labels and labels[i] in LABELS for i in documents[doc])
+        counts = {label: sum(labels.get(i) == label for i in documents[doc]) for label in LABELS} if complete else None
+        rows.append({'document_id': doc, 'prompt': generation['prompt'], 'length': generation['length'],
+                     'round': generation['round'], 'status': generation['status'], 'n_items': len(documents[doc]),
+                     'n_preserved': counts['preserved'] if complete else None,
+                     'rate': counts['preserved'] / len(documents[doc]) if complete else None,
+                     'n_unsupported': len(annotation.get('unsupported_claims', [])) if complete else None,
+                     'labels': counts})
+    return rows
+
+def contrasts(rows, length, round_):
+    result = []
+    for left, right in CONTRASTS:
+        subset = [r for r in rows if r['length'] == length and r['round'] == round_]
+        a = {r['document_id']: r['rate'] for r in subset if r['prompt'] == left}
+        b = {r['document_id']: r['rate'] for r in subset if r['prompt'] == right}
+        stats = paired_bootstrap(a, b)
+        result.append({'contrast': f'{left}-{right}', 'length': length, 'round': round_,
+                       'n_pairs': stats['n'], 'difference': stats['difference'], 'low': stats['low'], 'high': stats['high']})
+    return result
 
 def fraction_preserved(labels):
     labels = list(labels)

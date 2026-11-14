@@ -1,0 +1,3 @@
+{"id": "T1", "split": "test", "kind": "fictional", "items": [{"id": "T1-i1", "type": "finding"}, {"id": "T1-i2", "type": "qualification"}]}
+{"id": "T2", "split": "test", "kind": "fictional", "items": [{"id": "T2-i1", "type": "finding"}, {"id": "T2-i2", "type": "qualification"}]}
+{"id": "D1", "split": "development", "kind": "fictional", "items": [{"id": "D1-i1", "type": "finding"}, {"id": "D1-i2", "type": "qualification"}]}

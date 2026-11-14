@@ -1,53 +1,51 @@
-"""Export complete, adjudicated document-level qualification scores; never impute missing data."""
+"""Calculate v2 tables from saved generations and annotations."""
 import argparse
 import csv
-import json
-import sqlite3
+import statistics
+from collections import Counter, defaultdict
 from pathlib import Path
-from .analysis import fraction_preserved, paired_bootstrap
-from .models import Annotation
-from .runner import BACKENDS, load_documents
+from .analysis import LABELS, LENGTHS, SCORED_ROUNDS, load_jsonl, test_documents, summary_rates, contrasts
+
+def write(path, rows, fields):
+    with path.open('w', encoding='utf-8', newline='') as stream:
+        w = csv.DictWriter(stream, fieldnames=fields, extrasaction='ignore'); w.writeheader(); w.writerows(rows)
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--data', required=True)
-    p.add_argument('--annotations', required=True, help='JSONL with one adjudicated label per item')
-    p.add_argument('--db', required=True, help='SQLite database of the final run')
-    p.add_argument('--out', required=True)
-    p.add_argument('--model', choices=sorted(BACKENDS), required=True,
-                   help='model whose run database is analysed; models are analysed separately, never pooled')
-    args = p.parse_args()
-    backend = BACKENDS[args.model]
-    docs = [d for d in load_documents(args.data) if d.split == 'test']
-    with sqlite3.connect(f'file:{Path(args.db).resolve().as_posix()}?mode=ro', uri=True) as db:
-        tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        meta = dict(db.execute('SELECT key, value FROM run_meta')) if 'run_meta' in tables else {}
-        if meta.get('model') != backend.model:
-            raise ValueError(f'database model {meta.get("model")!r} does not match --model {backend.model!r}')
-        completed = {row[0] for row in db.execute("SELECT generation_id FROM attempts WHERE status='success'")}
-    labels = {}
-    for line in Path(args.annotations).read_text(encoding='utf-8').splitlines():
-        if not line.strip(): continue
-        a = Annotation.model_validate_json(line)
-        key = (a.generation_id, a.item_id)
-        if key in labels: raise ValueError(f'duplicate adjudicated annotation: {key}')
-        labels[key] = a.label
-    scores = {condition: {} for condition in 'ABC'}
-    rows = []
-    for doc in docs:
-        for condition in 'ABC':
-            gid = f'{doc.id}-{condition}-3'
-            score = (fraction_preserved(labels.get((gid, item.id)) for item in doc.items if item.type == 'qualification')
-                     if gid in completed else None)
-            scores[condition][doc.id] = score
-            rows.append({'model': backend.model, 'document_id': doc.id, 'category': doc.category, 'condition': condition, 'round': 3, 'qualification_preservation': score})
-    out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
-    with (out / 'round3_scores.csv').open('w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=rows[0].keys() if rows else ['model','document_id','category','condition','round','qualification_preservation'])
-        writer.writeheader(); writer.writerows(rows)
-    comparisons = {'model': backend.model,
-                   **{f'{a}-{b}': paired_bootstrap(scores[a], scores[b]) for a,b in [('C','A'),('B','A'),('C','B')]}}
-    (out / 'paired_comparisons.json').write_text(json.dumps(comparisons, indent=2), encoding='utf-8')
-    print(json.dumps(comparisons, indent=2))
+    p=argparse.ArgumentParser(); p.add_argument('--results', required=True); p.add_argument('--sources', required=True); p.add_argument('--out', required=True)
+    args=p.parse_args(); sources=load_jsonl(args.sources); docs=test_documents(sources)
+    source_map={x['id']:x for x in sources}; dest=Path(args.out); dest.mkdir(parents=True,exist_ok=True); primary=[]
+    for folder in sorted(Path(args.results).iterdir()):
+        if not folder.is_dir() or folder.resolve()==dest.resolve(): continue
+        genfile=folder/'generations.jsonl'; annfile=folder/'ai-annotations.jsonl'
+        if not genfile.exists() or not annfile.exists(): print(f'Skipping {folder.name}: missing input'); continue
+        generations=load_jsonl(genfile); annotations=load_jsonl(annfile); rows=summary_rates(generations,annotations,docs)
+        out=dest/folder.name; out.mkdir(parents=True,exist_ok=True)
+        flat=[{**r, **(r['labels'] or {k:None for k in LABELS})} for r in rows]
+        write(out/'summary_rates.csv',flat,['document_id','prompt','length','round','status','n_items','n_preserved','rate','n_unsupported',*LABELS])
+        comp=[x for length in LENGTHS for rnd in SCORED_ROUNDS for x in contrasts(rows,length,rnd)]
+        write(out/'contrasts.csv',comp,['contrast','length','round','n_pairs','difference','low','high'])
+        primary.extend({'model':folder.name,**x} for x in comp if x['contrast']=='few-zero' and x['length']=='limited' and x['round']==5)
+        groups=defaultdict(list)
+        for r in rows:
+            if r['rate'] is not None: groups[(r['prompt'],r['length'],r['round'])].append(r)
+        errors=[]; claims=[]
+        for (prompt,length,rnd),group in sorted(groups.items()):
+            counts=Counter(); [counts.update(r['labels']) for r in group]; total=sum(counts.values())
+            errors.extend({'prompt':prompt,'length':length,'round':rnd,'label':label,'count':counts[label],'share':counts[label]/total if total else None} for label in LABELS)
+            claims.append({'prompt':prompt,'length':length,'round':rnd,'n_summaries':len(group),'mean_unsupported':statistics.mean(r['n_unsupported'] for r in group)})
+        write(out/'errors.csv',errors,['prompt','length','round','label','count','share']); write(out/'claims.csv',claims,['prompt','length','round','n_summaries','mean_unsupported'])
+        buckets=defaultdict(list); failures=Counter()
+        for g in generations:
+            if g['document_id'] not in docs: continue
+            if g['status']!='success': failures[g['status']]+=1; continue
+            if g.get('word_count') is not None: buckets[(g['prompt'],g['length'],g['round'])].append(g['word_count'])
+        lengths=[{'prompt':k[0],'length':k[1],'round':k[2],'n_success':len(v),'mean_words':statistics.mean(v),'median_words':statistics.median(v),'share_over_250':sum(x>250 for x in v)/len(v) if k[1]=='limited' else None} for k,v in sorted(buckets.items())]
+        write(out/'lengths.csv',lengths,['prompt','length','round','n_success','mean_words','median_words','share_over_250']); write(out/'failures.csv',[{'status':k,'count':v} for k,v in failures.items()],['status','count'])
+        by=defaultdict(list)
+        for r in rows:
+            if r['round']==5 and r['rate'] is not None:
+                provenance=source_map[r['document_id']].get('provenance',''); drafter='haiku' if 'claude-haiku-5-5' in provenance else 'terra' if 'gpt-6.1-terra' in provenance else 'other'; by[(drafter,r['prompt'],r['length'])].append(r['rate'])
+        write(out/'by_drafter.csv',[{'drafter':k[0],'prompt':k[1],'length':k[2],'n_documents':len(v),'mean_rate':statistics.mean(v)} for k,v in by.items()],['drafter','prompt','length','n_documents','mean_rate'])
+    write(dest/'primary.csv',primary,['model','contrast','length','round','n_pairs','difference','low','high']); print(primary)
 
-if __name__ == '__main__': main()
+if __name__=='__main__': main()

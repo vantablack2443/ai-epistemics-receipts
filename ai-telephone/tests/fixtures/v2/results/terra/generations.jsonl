@@ -1,0 +1,9 @@
+{"generation_id": "T1-zero-limited-r5", "document_id": "T1", "prompt": "zero", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a b c", "word_count": 3}
+{"generation_id": "T1-one-limited-r5", "document_id": "T1", "prompt": "one", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a b c d", "word_count": 4}
+{"generation_id": "T1-few-limited-r5", "document_id": "T1", "prompt": "few", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a b", "word_count": 2}
+{"generation_id": "T2-zero-limited-r5", "document_id": "T2", "prompt": "zero", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a", "word_count": 1}
+{"generation_id": "T2-one-limited-r5", "document_id": "T2", "prompt": "one", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "timeout", "output": null, "word_count": null}
+{"generation_id": "T2-few-limited-r5", "document_id": "T2", "prompt": "few", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a b c d e", "word_count": 5}
+{"generation_id": "D1-zero-limited-r5", "document_id": "D1", "prompt": "zero", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a", "word_count": 1}
+{"generation_id": "D1-one-limited-r5", "document_id": "D1", "prompt": "one", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a", "word_count": 1}
+{"generation_id": "D1-few-limited-r5", "document_id": "D1", "prompt": "few", "length": "limited", "round": 5, "model": "gpt-6.1-terra", "status": "success", "output": "a", "word_count": 1}

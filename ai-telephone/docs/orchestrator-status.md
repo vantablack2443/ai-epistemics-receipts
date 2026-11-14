@@ -18,13 +18,17 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | 3 Source review (AI) | Haiku agent + orchestrator | **done for Haiku half** — 50 approved, 7 meanings revised, 0 rejected; `data/v2/sources.jsonl` built (interim, 8 docs; rebuilt when Terra half arrives) |
 | 3b Example selection (AI) | Haiku agent | running for E1–E3; E4–E5 cutoff 18:00 |
 | 4 Development runs | both sides | Haiku dev run done (60/60 success, 6.8 s/call); prompt fixed; one/few dev chains to rerun once examples are final |
-| 5 Freeze | Team sign-off | blocked by 4 |
-| 6 Final collection | both sides | blocked by 5 |
+| 5 Freeze | AI sign-off (recorded as AI) | **done** — `freeze/haiku.json` verified; Terra freeze by Codex side |
+| 6 Final collection | both sides | Haiku running (450 calls); Terra by Codex side |
 | 7 Opus annotation + human audit | Claude side + team | blocked by 6 |
 | 8 Analysis + report check | Codex side + Claude side | blocked by 7 |
 | Codex phases 0, 0b, 1 | Codex side | ready to start |
 
 ## Log
+- 2026-11-14 19:50 — Final Haiku run started 17:49; laptop suspended ~18:05–19:47, run resumed on
+  wake with no failures (135/135 success at 19:48). Keep-awake requested for the rest.
+- 2026-11-14 17:49 — Gate 4 passed (dev run with final examples: 90/90 success, 0 markdown,
+  2/45 limited outputs over 250 words). Freeze for Haiku written and verified; pushed.
 - 2026-11-14 17:20 — Team decision: use the Haiku backups now. All 15 sources (12 test, 3 dev) and
   all 5 examples are Haiku-drafted and AI-reviewed (98 items approved, 9 revised, 0 rejected).
   `data/v2/sources.jsonl` rebuilt; `data/v2/examples/selected.json` installed (bad types: 2

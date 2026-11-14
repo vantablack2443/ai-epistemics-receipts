@@ -129,8 +129,7 @@ def test_document_for_scores_only_rounds_1_3_5():
     assert document_for('long-01-few-limited-r4', docs) is None
 
 
-@pytest.mark.parametrize('judge_key,judge_id', [('opus-5-5', 'ai:claude-opus-5-5'),
-                                                ('opus-4-6-agy', 'ai:claude-opus-4-6-thinking')])
+@pytest.mark.parametrize('judge_key,judge_id', [('opus-5-5', 'ai:claude-opus-5-5')])
 def test_label_v2_rounds_135_with_judge_recorded(tmp_path, judge_key, judge_id):
     doc = v2_document('long-01')
     sources = write_run(tmp_path, doc)

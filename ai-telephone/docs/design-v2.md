@@ -13,7 +13,7 @@ hallucination across 1, 3, and 5 rounds — with and without a length limit?
 
 | Factor | Levels |
 |---|---|
-| Model (analysed separately, never pooled) | `gpt-6.1-terra` (Codex CLI), `claude-haiku-5-5` (Claude Code CLI), `gemini-3.8-flash-low` (Antigravity CLI) |
+| Model (analysed separately, never pooled) | **Core:** `gpt-6.1-terra` (Codex CLI), `claude-haiku-5-5` (Claude Code CLI). **Optional, only if time allows:** `gemini-3.8-flash-low` (Antigravity CLI), run by the Claude-side team member by hand |
 | Prompt | `zero` (instruction only), `one` (instruction + one example pair: good vs bad summary), `few` (instruction + five examples: three good, two bad) |
 | Length | `limited` (every summary at most 250 words) and `free` (no limit) |
 | Depth | one chain of 5 rounds; scored at rounds 1, 3, 5 |
@@ -23,11 +23,11 @@ hallucination across 1, 3, and 5 rounds — with and without a length limit?
 
 | Role | Claude side (team member A) | Codex side (team member B) |
 |---|---|---|
-| Summarizer under test | `claude-haiku-5-5` via Claude Code; also `gemini-3.8-flash-low` via Antigravity | `gpt-6.1-terra` via Codex |
+| Summarizer under test | `claude-haiku-5-5` via Claude Code (optional third: `gemini-3.8-flash-low`, run by the team member themself, never by agents) | `gpt-6.1-terra` via Codex |
 | Agent that builds code, merges CSVs, runs exports | Claude Code on Haiku (`claude-haiku-5-5`) | Codex on Terra (`gpt-6.1-terra`) |
 | Drafts long sources (same brief: `docs/source-brief.md`) | Haiku: `long-01`–`long-06`, `dev-long-01`, `dev-long-02` | Terra: `long-07`–`long-12`, `dev-long-03` |
 | Builds prompt examples (`docs/examples-brief.md`) | Haiku: example sources E1–E3; candidate summaries for all 5 | Terra: example sources E4–E5; candidate summaries for all 5 |
-| AI annotator (grader) | `claude-opus-5-5` via Claude Code, for all models (fallback `claude-opus-4-6-thinking` via Antigravity, decided once at Step 4) | — |
+| AI annotator (grader) | `claude-opus-5-5` via Claude Code, the only annotator, for all models | — |
 | Human work | source review, example selection, freeze sign-off, audit labels | same |
 
 The annotator is never a summarizer under test. Splitting source drafting and example
@@ -37,10 +37,13 @@ writing; the analysis reports results separately for Haiku-drafted and Terra-dra
 Each round sees only the previous round's output, never the original. The original is never
 restored. Ground truth never enters a summarizer prompt.
 
+Google/Gemini policy: no agent and no orchestrator makes Gemini or Google calls. The optional
+Gemini run, if any, is started by the team member themself after the core runs are done.
+
 Calls per model: 15 docs × 3 prompts × 2 lengths × 5 rounds = **450**. Scored summaries per
 model: 15 × 3 × 2 × 3 = **270**. Development: 3 docs × 30 = 90 calls per model.
 
-Fixed settings: low reasoning effort for all three models; seed 1729 for scheduling and
+Fixed settings: low reasoning effort for every summarizer; seed 1729 for scheduling and
 bootstrap; one fresh process per call; empty working directory; tools disabled or rejected
 from the event stream; 5-minute timeout; retries only for transient errors (15 s, 60 s);
 stop on auth/quota/model-access errors; overlength output kept unchanged and passed on;
@@ -75,7 +78,7 @@ against the original source. A blinded human audit sample per model gives agreem
 ## Data contracts (both teams build against these)
 
 **Document IDs:** fictional test `long-01` … `long-12`; paper test `paper-01` … `paper-03`;
-development `dev-long-01` … `dev-long-03`. Model keys: `terra`, `haiku`, `gemini`.
+development `dev-long-01` … `dev-long-03`. Model keys: `terra`, `haiku` (and `gemini` only if the optional third model is run).
 
 **Generation ID:** `{document_id}-{prompt}-{length}-r{round}`, e.g. `long-07-few-limited-r3`.
 `prompt` ∈ `zero|one|few`, `length` ∈ `limited|free`, `round` ∈ 1..5.

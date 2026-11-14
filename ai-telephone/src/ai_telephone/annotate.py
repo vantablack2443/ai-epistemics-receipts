@@ -23,8 +23,8 @@ from pathlib import Path
 from .analysis import agreement
 from .annotator_prompt import make_annotation_prompt
 from .models import Annotation
-from .runner import (BACKENDS, Backend, agy_binary, agy_resolved_model, claude_binary, claude_resolved_model, database,
-                     generate, load_documents, load_documents_v2, parse_agy_events, parse_claude_events)
+from .runner import (BACKENDS, Backend, claude_binary, claude_resolved_model, database,
+                     generate, load_documents, load_documents_v2, parse_claude_events)
 
 JUDGE_MODEL = 'claude-opus-5-5'
 JUDGE_ID = f'ai:{JUDGE_MODEL}'
@@ -35,15 +35,8 @@ JUDGE_ARGS = ['claude', '-p', '--model', JUDGE_MODEL, '--effort', 'high',
 JUDGE = Backend('judge-opus', JUDGE_MODEL, 'high', 'Claude Code CLI (signed-in Claude)', tuple(JUDGE_ARGS),
                 claude_binary, lambda raw: parse_claude_events(raw, JUDGE_MODEL), claude_resolved_model,
                 'artifacts/ai-annotations.sqlite')
-# Alternative judge, run through the Antigravity CLI (used if Claude usage is short). One judge is
-# chosen for every model; the choice is recorded in each line's reviewer_id.
-AGY_JUDGE_MODEL = 'claude-opus-4-6-thinking'
-AGY_JUDGE = Backend('judge-opus-agy', AGY_JUDGE_MODEL, 'high', 'Antigravity CLI (signed-in Google)',
-                    ('agy', '--model', AGY_JUDGE_MODEL, '--effort', 'high', '--output-format', 'stream-json',
-                     '--disable-slash-commands'),
-                    agy_binary, lambda raw: parse_agy_events(raw, AGY_JUDGE_MODEL), agy_resolved_model,
-                    'artifacts/ai-annotations.sqlite', prompt_in_argv=True)
-JUDGES = {'opus-5-5': JUDGE, 'opus-4-6-agy': AGY_JUDGE}
+# The only annotator: claude-opus-5-5 via Claude Code, the same judge for every model.
+JUDGES = {'opus-5-5': JUDGE}
 SCORED_ROUNDS = {1, 3, 5}
 LABELS = {'preserved', 'omitted', 'strengthened', 'weakened', 'contradicted'}
 

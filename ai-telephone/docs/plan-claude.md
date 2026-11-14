@@ -7,7 +7,8 @@ conflict instead of choosing.
 
 **Models (final):** every agent on this side runs on **Claude Haiku (`claude-haiku-5-5`)**:
 building code, drafting sources and example sources, merging CSVs, running exports. The
-summarizers under test on this side are Haiku and Gemini Flash. The AI annotator is
+summarizer under test on this side is Haiku. Gemini Flash is an **optional** third model the
+team member may run by hand at the end if time allows; agents never call Gemini or Google. The AI annotator is
 **`claude-opus-5-5`** for all models (it is never a summarizer). See the roles table in
 `docs/design-v2.md`.
 
@@ -91,7 +92,7 @@ flaky CI, translation, HVAC valve, bridge brace) or the v1 drafts.
   (test) or `results/<model>/generations-development.jsonl`, one row per scheduled
   generation ID in the design-v2 export format, including `not_run` rows; counts `attempts`.
 - `validate --data PATH`: validates v2 sources, prints counts by split and kind.
-- Backend `gemini` (see 1.6). Default DBs: `artifacts/v2-<model>.sqlite`.
+- Backend `gemini` exists in code for the optional third model only (see 1.6). Default DBs: `artifacts/v2-<model>.sqlite`.
 
 ### 1.5 `schedule.py` and `freeze.py`
 - `schedule_v2(docs, seed=1729)`: test documents shuffled; per document the 6 (prompt,
@@ -102,7 +103,7 @@ flaky CI, translation, HVAC valve, bridge brace) or the v1 drafts.
   `docs/design-v2.md`, plus the schedule. Requires all sources `reviewed: true`.
 - `freeze.py --verify freeze/M.json` recomputes hashes, prints `verified` or each mismatch.
 
-### 1.6 Gemini backend (needs real calls; small)
+### 1.6 Gemini backend (done; optional model; no further Gemini calls by agents)
 1. Capture one real stream: `agy -p "<prompt>" --model gemini-3.8-flash-low
    --output-format stream-json --disable-slash-commands` from an empty temp directory, with
    a prompt that tempts tool use ("List the files in this directory, then say DONE").
@@ -115,7 +116,7 @@ flaky CI, translation, HVAC valve, bridge brace) or the v1 drafts.
 ### 1.7 Annotator
 `annotate.py`: accept v2 sources and v2 generation IDs (parse with `rsplit('-', 3)`); label
 only rounds 1, 3, 5; write `results/<model>/ai-annotations.jsonl`. Add `--judge
-{opus-5-5,opus-4-6-agy}`; the choice is recorded in every line's `reviewer_id`.
+{opus-5-5}` (the only annotator); recorded in every line's `reviewer_id`.
 
 ### Gate 1 (orchestrator checks)
 - Full test suite passes; new tests cover: chain isolation over 5 rounds; ID round-trip;
@@ -180,27 +181,27 @@ merges the CSVs, applies revisions, re-shows changed items, imports into
 
 ## Step 4 — development runs (Sunday 08:00 → 09:30)
 
-Haiku and Gemini: `run-dev` on the 3 development documents (90 calls each); Terra by the
+Haiku: `run-dev` on the 3 development documents (90 calls); Terra by the
 Codex side. AI annotator (`claude-opus-5-5`) on development rounds 1/3/5.
 Gate: ≥ 95% success per model; no tool events; judge validation errors = 0 (or explained);
-Claude usage after dev leaves room for ~810 judge calls — otherwise switch the judge to
-`claude-opus-4-6-thinking` via Antigravity now, for all models (decided once, never again). Prompt fixes allowed only here, applied to all models,
+Claude usage after dev leaves room for ~540 judge calls — if not, annotate in batches across
+usage windows; the annotator never changes. Prompt fixes allowed only here, applied to all models,
 then development reruns in a new database.
 
 ## Step 5 — HUMAN GATE: freeze (Sunday ~10:00)
 
 Team writes `signoff.json` (named people for: source review, development review,
-environment review, analysis plan). Orchestrator runs `freeze` for terra, haiku, gemini and
-pushes `freeze/*.json`. Gate: `freeze --verify` prints `verified` for all three.
+environment review, analysis plan). Orchestrator runs `freeze` for terra and haiku and
+pushes `freeze/*.json`. Gate: `freeze --verify` prints `verified` for both.
 
 ## Step 6 — final collection (Sunday 10:00 → 12:00)
 
-`run-final` for haiku and gemini (450 calls each), Terra by the Codex side. Export and push.
+`run-final` for haiku (450 calls), Terra by the Codex side. Export and push.
 Gate: per model, counts by status; no tool events; every `not_run` explained by a failure.
 
 ## Step 7 — AI annotation and human audit (Sunday 12:00 → 15:00)
 
-AI annotator on all three models (270 summaries each). `annotate audit --n 40` per model →
+AI annotator on Haiku and Terra (270 summaries each). `annotate audit --n 40` per model →
 team labels blindly (HUMAN GATE) → `annotate agree` → `results/<model>/audit-agreement.json`.
 Gate: every successful scored generation has exactly one valid annotation line.
 
@@ -212,4 +213,6 @@ annotator, environment), and reviews the final PDF.
 
 ## Cuts if time runs short (in order; record each)
 1. Drop the `free` length scenario. 2. First 10 test documents in schedule order.
-3. Drop Gemini. Never drop: zero-shot baseline, round 5, the human audit, raw outputs.
+Optional at the very end, only if everything above is done and time remains: the team member
+runs Gemini Flash by hand (`freeze --model gemini`, `run-final --model gemini`, export, Opus
+annotation). Never drop: zero-shot baseline, round 5, the human audit, raw outputs.

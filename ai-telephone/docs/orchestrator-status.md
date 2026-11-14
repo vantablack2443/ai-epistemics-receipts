@@ -24,6 +24,9 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | Codex phases 0, 0b, 1 | Codex side | ready to start |
 
 ## Log
+- 2026-11-14 17:35 — Team decision: Gemini Flash is only an optional third test model, run by
+  the team member by hand at the end if time allows. No agent or orchestrator makes Gemini or
+  Google calls. Antigravity backup annotator removed; Opus 5.5 is the only annotator.
 - 2026-11-14 17:20 — Gate 1 passed. Orchestrator fix: Antigravity executed tool calls in
   headless mode (detected, but after running). Added `--sandbox` and session-only deny rules;
   verified a tool-tempting prompt ends with run_command/read_file in state ERROR (not run).

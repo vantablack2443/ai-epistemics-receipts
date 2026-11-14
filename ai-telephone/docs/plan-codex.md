@@ -417,8 +417,9 @@ fill in labels.
 ## Phase 5 — analysis and report (Sunday about 14:00 to 19:30)
 
 ### Step 5.1 — run the analysis
-After `results/{terra,haiku,gemini}/generations.jsonl` and `ai-annotations.jsonl` are all
-pushed:
+After `results/{terra,haiku}/generations.jsonl` and `ai-annotations.jsonl` are pushed
+(`results/gemini/` appears only if the optional Gemini run happened; the analysis handles any
+model folders present):
 ```powershell
 git pull --rebase origin codex/ai-telephone
 uv run python -m ai_telephone.analyze_cli --results results --sources data/v2/sources.jsonl --out results/analysis
@@ -438,7 +439,7 @@ git push origin codex/ai-telephone
    model and harness are confounded.
 4. Appendix A must cover: synthetic sources plus three papers; 15 documents; one output per
    cell; vendor CLI harnesses rather than bare APIs (Terra via Codex, Haiku via Claude Code,
-   Gemini via Antigravity); AI annotator validated only on an audit sample; no measurement
+   Gemini via Antigravity only if the optional run happened); AI annotator validated only on an audit sample; no measurement
    of human decisions; possible memorisation of the real papers; possible misuse of polished
    summaries to make weak evidence look strong; no private or personal data used.
 5. Hand the draft to the human to paste into the official template and to the Claude side

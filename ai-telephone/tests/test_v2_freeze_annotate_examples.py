@@ -198,6 +198,27 @@ def test_selected_examples_drive_render_and_prompt(tmp_path, monkeypatch):
     assert expected_block(few) in prompt and prompt.endswith('Text to summarize:\nSOURCE')
 
 
+def test_selected_wrapped_form_ignores_extra_keys(tmp_path):
+    wrapped = tmp_path / 'wrapped.json'
+    keyed = {f'E{n}': record(name, good_from='haiku run 1', bad_from='constructed', bad_type='omission',
+                             source_note='fixture')
+             for n, name in enumerate(ORDER, 1)}
+    wrapped.write_text(json.dumps({'selected_by': 'Named Person', 'examples': keyed}), encoding='utf-8')
+    one, few = load_selected(wrapped)
+    assert one == [few[0]] and len(few) == 5
+    assert all(set(e) == {'source', 'good', 'bad', 'why_bad'} for e in few)
+    assert few[0]['source'] == EXAMPLES['coupons']['source']
+    assert render_examples('few', path=wrapped) == expected_block(few)
+    assert 'haiku run 1' not in render_examples('few', path=wrapped)
+
+    short = tmp_path / 'wrapped_short.json'
+    short.write_text(json.dumps({'selected_by': 'Named Person',
+                                 'examples': {f'E{n}': record(name) for n, name in enumerate(ORDER[:4], 1)}}),
+                     encoding='utf-8')
+    with pytest.raises(ValueError, match='exactly five'):
+        load_selected(short)
+
+
 def test_selected_list_form_and_validation(tmp_path):
     good_list = tmp_path / 'list.json'
     good_list.write_text(json.dumps([record(n) for n in ORDER]), encoding='utf-8')

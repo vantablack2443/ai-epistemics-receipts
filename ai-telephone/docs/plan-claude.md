@@ -5,6 +5,17 @@ what a step says, only in the files it names. When a step says **STOP**, stop an
 `docs/design-v2.md` is the controlling design; if this plan disagrees with it, report the
 conflict instead of choosing.
 
+**Models (final):** every agent on this side runs on **Claude Haiku (`claude-haiku-5-5`)**:
+building code, drafting sources and example sources, merging CSVs, running exports. The
+summarizers under test on this side are Haiku and Gemini Flash. The AI annotator is
+**`claude-opus-5-5`** for all models (it is never a summarizer). See the roles table in
+`docs/design-v2.md`.
+
+**Current state (Saturday 16:15):** Step 1 code is partly written and uncommitted on the
+Claude-side machine (74 tests passing). The provisional examples in
+`summarizer_examples.py` will be replaced by the ones built per `docs/examples-brief.md`.
+Nothing runs until the team member says go.
+
 Orchestration: the orchestrator (Claude Code, main session) runs the steps in order. A step
 is complete only when its **Gate** checks pass, verified by the orchestrator, not by the
 agent that did the work. Progress is recorded in `docs/orchestrator-status.md`. Steps marked
@@ -53,6 +64,9 @@ Round 1 receives the source; round n receives only round n−1's output; the sam
 length are used in every round of a chain.
 
 ### 1.3 `summarizer_examples.py` — example content
+**Superseded by `docs/examples-brief.md`:** final examples are real Haiku and Terra outputs
+selected by humans and loaded from `data/v2/examples/selected.json`. The text below describes
+the required shape (and the provisional placeholders until the selection exists).
 `ONE_SHOT`: 1 example; `FEW_SHOT`: 5 examples (`FEW_SHOT[0]` may equal `ONE_SHOT[0]`).
 Each example: `source` (fictional, 150–250 words, one finding and three qualifications),
 `good` (a summary keeping finding and all qualifications, ≤ 80 words), `bad` (a summary that
@@ -114,11 +128,19 @@ only rounds 1, 3, 5; write `results/<model>/ai-annotations.jsonl`. Add `--judge
 
 ## Step 2 — sources (Saturday evening, in parallel with Step 1)
 
-### 2.1 Fictional reports (agent)
-Write 15 fictional technical reports to `data/v2/drafts/fictional.jsonl` (DocumentV2 JSON
-per line): `long-01`…`long-12` (`split: test`) and `dev-long-01`…`dev-long-03`
-(`split: development`), `kind: fictional`, `provenance: "Fictional; drafted with Claude
-Sonnet; human review pending"`, `licence: "CC0 (team-authored)"`.
+### 2.1 Fictional reports (Haiku agent, this side's share only)
+**Follow `docs/source-brief.md` exactly.** This side drafts `long-01`–`long-06`,
+`dev-long-01`, `dev-long-02` with Haiku, one document per run, appending accepted documents to
+`data/v2/drafts/fictional.jsonl`. The Codex side drafts `long-07`–`long-12` and `dev-long-03`
+with Terra into `data/v2/drafts/fictional-terra.jsonl`. The genre, domain, and strength of each
+ID are fixed in the brief's table. The general requirements below still apply.
+
+### 2.1b Prompt examples (Haiku agent + humans)
+Follow `docs/examples-brief.md`: draft example sources E1–E3 with Haiku; produce two Haiku
+candidate summaries for each of E1–E5; humans of both sides select good/bad pairs together;
+load `selected.json` into `summarizer_examples.py` with a test. Must finish before Step 4.
+
+### 2.1 (general requirements for every fictional report)
 Each report: 1,000–1,400 words; genre varies (incident review, evaluation report, design
 review, field-trial report, migration post-mortem, safety assessment, benchmark write-up,
 clinical-device bench test, energy-system pilot, data-pipeline audit, ML model evaluation,
@@ -159,10 +181,10 @@ merges the CSVs, applies revisions, re-shows changed items, imports into
 ## Step 4 — development runs (Sunday 08:00 → 09:30)
 
 Haiku and Gemini: `run-dev` on the 3 development documents (90 calls each); Terra by the
-Codex side. AI annotator on development rounds 1/3/5 with the primary judge.
+Codex side. AI annotator (`claude-opus-5-5`) on development rounds 1/3/5.
 Gate: ≥ 95% success per model; no tool events; judge validation errors = 0 (or explained);
 Claude usage after dev leaves room for ~810 judge calls — otherwise switch the judge to
-`opus-4-6-agy` now, for all models. Prompt fixes allowed only here, applied to all models,
+`claude-opus-4-6-thinking` via Antigravity now, for all models (decided once, never again). Prompt fixes allowed only here, applied to all models,
 then development reruns in a new database.
 
 ## Step 5 — HUMAN GATE: freeze (Sunday ~10:00)

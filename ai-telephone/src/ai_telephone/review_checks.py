@@ -88,4 +88,76 @@ def main():
         for f in r['flags']:
             print(f"{r['id']}: {f}")
 
-if __name__ == '__main__': main()
+# --- design v2: long sources (plain JSON, independent of the evolving pydantic models) ---
+
+V2_DRAFTS = ('data/v2/drafts/fictional.jsonl', 'data/v2/drafts/fictional-terra.jsonl', 'data/v2/drafts/papers.jsonl')
+
+def load_v2(paths=V2_DRAFTS):
+    docs = []
+    for p in map(Path, paths):
+        if p.exists():
+            docs += [json.loads(l) for l in p.read_text(encoding='utf-8').splitlines() if l.strip()]
+    return docs
+
+def check_v2(doc):
+    flags = []
+    text, items = doc['text'], doc['items']
+    n = len(text.split())
+    if not 900 <= n <= 1500:
+        flags.append(f'length {n} words (needs 900-1500)')
+    if not 6 <= len(items) <= 10:
+        flags.append(f'{len(items)} items (needs 6-10)')
+    findings = sum(i['type'] == 'finding' for i in items)
+    if findings not in (1, 2):
+        flags.append(f'{findings} findings (needs 1-2)')
+    ids = [i['id'] for i in items]
+    if len(set(ids)) != len(ids) or any(not i.startswith(doc['id'] + '-') for i in ids):
+        flags.append('item ids not unique or not prefixed by the document id')
+    spans = []
+    for i in items:
+        c = text.count(i['quotation'])
+        if c != 1:
+            flags.append(f"{i['id']}: quotation occurs {c} times")
+        s = text.find(i['quotation']); spans.append((s, s + len(i['quotation']), i['id']))
+        if not i.get('meaning', '').strip():
+            flags.append(f"{i['id']}: no intended meaning")
+    spans.sort()
+    for (s1, e1, a), (s2, e2, b) in zip(spans, spans[1:]):
+        if s1 >= 0 and s2 < e1:
+            flags.append(f'{a} and {b}: quotations overlap')
+    if SENSITIVE.search(text):
+        flags.append('possible URL, email, or credential-like string')
+    finding_text = ' '.join(i['quotation'] for i in items if i['type'] == 'finding')
+    return {'id': doc['id'], 'split': doc['split'], 'kind': doc.get('kind'), 'words': n,
+            'finding_hedged': bool(HEDGES.search(finding_text)), 'flags': flags}
+
+def run_v2():
+    docs = load_v2()
+    results = {d['id']: check_v2(d) for d in docs}
+    cw = {d['id']: content_words(d['text']) for d in docs}
+    pairs = []
+    for a, b in combinations(docs, 2):
+        jw = len(cw[a['id']] & cw[b['id']]) / max(1, len(cw[a['id']] | cw[b['id']]))
+        pairs.append({'a': a['id'], 'b': b['id'], 'word_jaccard': round(jw, 3), 'cross_split': a['split'] != b['split']})
+        if jw >= 0.2:
+            for x, y in ((a, b), (b, a)):
+                results[x['id']]['flags'].append(f"similar to {y['id']} (word overlap {jw:.2f})")
+    pairs.sort(key=lambda p: -p['word_jaccard'])
+    counts = {}
+    for d in docs:
+        counts[f"{d['split']}/{d.get('kind')}"] = counts.get(f"{d['split']}/{d.get('kind')}", 0) + 1
+    summary = {'documents': len(docs), 'by_split_kind': counts,
+               'with_flags': sum(bool(r['flags']) for r in results.values()),
+               'tentative_findings': sorted(k for k, r in results.items() if r['finding_hedged']),
+               'max_word_overlap': pairs[0] if pairs else None}
+    out = Path('artifacts/review-checks-v2.json'); out.parent.mkdir(exist_ok=True)
+    out.write_text(json.dumps({'summary': summary, 'documents': results}, indent=2), encoding='utf-8')
+    print(json.dumps(summary, indent=2))
+    for r in results.values():
+        for f in r['flags']:
+            print(f"{r['id']}: {f}")
+    return results
+
+if __name__ == '__main__':
+    import sys
+    run_v2() if '--v2' in sys.argv else main()

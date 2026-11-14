@@ -17,7 +17,22 @@ hallucination across 1, 3, and 5 rounds — with and without a length limit?
 | Prompt | `zero` (instruction only), `one` (instruction + one example pair: good vs bad summary), `few` (instruction + five examples: three good, two bad) |
 | Length | `limited` (every summary at most 250 words) and `free` (no limit) |
 | Depth | one chain of 5 rounds; scored at rounds 1, 3, 5 |
-| Sources | 15 test documents (~1,200 words: 12 fictional technical reports + 3 excerpts of open-licence papers) and 3 development documents |
+| Sources | 15 test documents (~1,200 words: 12 fictional technical reports + 3 optional excerpts of open-licence papers) and 3 development documents |
+
+## Roles and models (final, 2026-11-14)
+
+| Role | Claude side (team member A) | Codex side (team member B) |
+|---|---|---|
+| Summarizer under test | `claude-haiku-5-5` via Claude Code; also `gemini-3.8-flash-low` via Antigravity | `gpt-6.1-terra` via Codex |
+| Agent that builds code, merges CSVs, runs exports | Claude Code on Haiku (`claude-haiku-5-5`) | Codex on Terra (`gpt-6.1-terra`) |
+| Drafts long sources (same brief: `docs/source-brief.md`) | Haiku: `long-01`–`long-06`, `dev-long-01`, `dev-long-02` | Terra: `long-07`–`long-12`, `dev-long-03` |
+| Builds prompt examples (`docs/examples-brief.md`) | Haiku: example sources E1–E3; candidate summaries for all 5 | Terra: example sources E4–E5; candidate summaries for all 5 |
+| AI annotator (grader) | `claude-opus-5-5` via Claude Code, for all models (fallback `claude-opus-4-6-thinking` via Antigravity, decided once at Step 4) | — |
+| Human work | source review, example selection, freeze sign-off, audit labels | same |
+
+The annotator is never a summarizer under test. Splitting source drafting and example
+generation between Haiku and Terra balances any advantage a model may have on its own
+writing; the analysis reports results separately for Haiku-drafted and Terra-drafted sources.
 
 Each round sees only the previous round's output, never the original. The original is never
 restored. Ground truth never enters a summarizer prompt.
@@ -102,7 +117,8 @@ generation ID with its final status:
 ```
 
 **Sources** (committed): `data/v2/sources.jsonl`, one `Document` per line with `id`, `split`
-(`development|test`), `kind` (`fictional|paper`), `text`, `provenance`, `licence`, `items`
+(`development|test`), `kind` (`fictional|paper`), `text`, `provenance` (must name the drafting
+model, e.g. "Fictional; drafted with claude-haiku-5-5"), `licence`, `items`
 (each `id`, `type` `finding|qualification`, `quotation`, `meaning`), `reviewed`.
 
 ## File ownership (avoid merge conflicts)

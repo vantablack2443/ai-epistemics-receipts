@@ -13,6 +13,13 @@ Branch: `codex/ai-telephone`.
 
 ---
 
+**Model for everything on this side:** run Codex itself on **`gpt-6.1-terra`** (reasoning
+effort `low`) for all work in this plan: drafting, coding, exports. The other side uses Claude
+Haiku for its work. The AI annotator (`claude-opus-5-5`) runs on the other side.
+
+**Order of work:** Phase 0 → **Phase 0b (sources and examples, first, because the team
+reviews them tonight)** → Phase 1 → later phases when the human says so.
+
 ## 0. Rules that apply to every step
 
 1. **Files you may edit** (Codex side):
@@ -84,6 +91,45 @@ git pull --rebase origin codex/ai-telephone
 git push origin codex/ai-telephone
 ```
 Tell the human: "Phase 0 done, smoke test passed."
+
+---
+
+## Phase 0b — Terra drafts its share of sources and examples (Saturday evening, before Phase 1)
+
+Also allowed to create/edit: `ai-telephone/data/v2/drafts/fictional-terra.jsonl`,
+`ai-telephone/data/v2/examples/E4.txt`, `E5.txt`, and append to
+`ai-telephone/data/v2/examples/candidates.jsonl`.
+
+### Step 0b.1 — draft 7 long sources
+Read `docs/source-brief.md` completely. Draft **`long-07` to `long-12` and `dev-long-03`**,
+one document per Codex session, using the **Drafting prompt** in that file exactly, with
+`<MODEL ID>` = `gpt-6.1-terra` and the genre/domain/strength from its table.
+After each document:
+1. Append the JSON object as one line to `data/v2/drafts/fictional-terra.jsonl`.
+2. Run `uv run python -m ai_telephone.review_checks --v2`.
+3. If the new document has any flag: delete its line and redraft (new session). Never
+   hand-edit a quotation to make it match.
+**Check:** 7 lines, IDs exactly as listed, no flags for any of them.
+
+### Step 0b.2 — example sources and candidates
+Read `docs/examples-brief.md` completely.
+1. Draft example sources **E4** and **E5** with its drafting prompt; save as
+   `data/v2/examples/E4.txt` and `E5.txt`.
+2. When the other side has pushed E1–E3 (pull first), write the **candidate summaries**:
+   for each of E1–E5, two fresh Codex sessions with the brief's summary prompt. Append each
+   result to `data/v2/examples/candidates.jsonl` as
+   `{"example": "E1", "model": "gpt-6.1-terra", "run": 1, "summary": "..."}`.
+**Check:** 10 Terra lines in `candidates.jsonl` (5 examples × 2 runs).
+
+### Step 0b.3 — push
+```powershell
+git add data/v2/drafts/fictional-terra.jsonl data/v2/examples
+git commit -m "Add Terra-drafted sources and example candidates"
+git pull --rebase origin codex/ai-telephone
+git push origin codex/ai-telephone
+```
+Tell the human: "Phase 0b done". The humans of both sides then pick the examples together
+(examples brief, Step E3) and review all sources (Claude plan, Step 3).
 
 ---
 
@@ -202,6 +248,11 @@ uv run python -m ai_telephone.analyze_cli --results results --sources data/v2/so
      (`share_over_250` only for `limited`; empty for `free`).
    - `failures.csv` — `status,count` over all test-document generations that are not
      `success`.
+   - `by_drafter.csv` — the round-5 preservation rate per prompt and length, split by which
+     model drafted the source (read from the source's `provenance`: contains
+     `claude-haiku-5-5` → `haiku`, `gpt-6.1-terra` → `terra`, otherwise `other`). Columns
+     `drafter,prompt,length,n_documents,mean_rate`. This checks whether a model does better on
+     sources it wrote itself.
 4. Write `results/analysis/primary.csv` with one row per model: the `few-zero` contrast at
    length `limited`, round 5.
 5. Print the primary rows to the terminal.

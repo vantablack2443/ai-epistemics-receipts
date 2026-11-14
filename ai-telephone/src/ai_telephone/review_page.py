@@ -153,4 +153,24 @@ def main():
     out.write_text(PAGE.replace('__DATA__', payload), encoding='utf-8')
     print(f'Wrote {out} with {len(data)} documents')
 
-if __name__ == '__main__': main()
+def main_v2():
+    """Review page for design-v2 long sources (6-10 items, fictional and paper documents)."""
+    from .review_checks import load_v2, run_v2
+    checks = run_v2()
+    data = [{'id': d['id'], 'split': d['split'], 'category': d.get('kind', ''), 'words': checks[d['id']]['words'],
+             'text': d['text'], 'finding_hedged': checks[d['id']]['finding_hedged'], 'flags': checks[d['id']]['flags'],
+             'items': [{'id': i['id'], 'type': i['type'], 'quotation': i['quotation'], 'meaning': i['meaning'],
+                        'paraphrases': i.get('paraphrases', [])} for i in d['items']]} for d in load_v2()]
+    payload = json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
+    page = (PAGE.replace('__DATA__', payload)
+            .replace('ai-telephone-source-review-v1', 'ai-telephone-source-review-v2')
+            .replace(' Exactly six test documents should be marked strong.', ' Mark strong when the evidence clearly establishes the finding.')
+            .replace("${strong}/6 strong", "${strong} strong")
+            .replace('Fits “${d.category}” category', 'Accurate, realistic “${d.category}” document'))
+    out = Path('artifacts/source-review-v2.html'); out.parent.mkdir(exist_ok=True)
+    out.write_text(page, encoding='utf-8')
+    print(f'Wrote {out} with {len(data)} documents')
+
+if __name__ == '__main__':
+    import sys
+    main_v2() if '--v2' in sys.argv else main()

@@ -6,7 +6,7 @@ import sqlite3
 from pathlib import Path
 from .analysis import fraction_preserved, paired_bootstrap
 from .models import Annotation
-from .runner import load_documents
+from .runner import BACKENDS, load_documents
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
@@ -14,9 +14,16 @@ def main():
     p.add_argument('--annotations', required=True, help='JSONL with one adjudicated label per item')
     p.add_argument('--db', required=True, help='SQLite database of the final run')
     p.add_argument('--out', required=True)
+    p.add_argument('--model', choices=sorted(BACKENDS), required=True,
+                   help='model whose run database is analysed; models are analysed separately, never pooled')
     args = p.parse_args()
+    backend = BACKENDS[args.model]
     docs = [d for d in load_documents(args.data) if d.split == 'test']
     with sqlite3.connect(f'file:{Path(args.db).resolve().as_posix()}?mode=ro', uri=True) as db:
+        tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        meta = dict(db.execute('SELECT key, value FROM run_meta')) if 'run_meta' in tables else {}
+        if meta.get('model') != backend.model:
+            raise ValueError(f'database model {meta.get("model")!r} does not match --model {backend.model!r}')
         completed = {row[0] for row in db.execute("SELECT generation_id FROM attempts WHERE status='success'")}
     labels = {}
     for line in Path(args.annotations).read_text(encoding='utf-8').splitlines():
@@ -33,12 +40,13 @@ def main():
             score = (fraction_preserved(labels.get((gid, item.id)) for item in doc.items if item.type == 'qualification')
                      if gid in completed else None)
             scores[condition][doc.id] = score
-            rows.append({'document_id': doc.id, 'category': doc.category, 'condition': condition, 'round': 3, 'qualification_preservation': score})
+            rows.append({'model': backend.model, 'document_id': doc.id, 'category': doc.category, 'condition': condition, 'round': 3, 'qualification_preservation': score})
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
     with (out / 'round3_scores.csv').open('w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=rows[0].keys() if rows else ['document_id','category','condition','round','qualification_preservation'])
+        writer = csv.DictWriter(f, fieldnames=rows[0].keys() if rows else ['model','document_id','category','condition','round','qualification_preservation'])
         writer.writeheader(); writer.writerows(rows)
-    comparisons = {f'{a}-{b}': paired_bootstrap(scores[a], scores[b]) for a,b in [('C','A'),('B','A'),('C','B')]}
+    comparisons = {'model': backend.model,
+                   **{f'{a}-{b}': paired_bootstrap(scores[a], scores[b]) for a,b in [('C','A'),('B','A'),('C','B')]}}
     (out / 'paired_comparisons.json').write_text(json.dumps(comparisons, indent=2), encoding='utf-8')
     print(json.dumps(comparisons, indent=2))
 

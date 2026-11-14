@@ -3,7 +3,7 @@
 Following ECC eval-harness guidance, define checks before implementation. No gate below has yet passed.
 
 - Chain isolation: rounds two and three receive only their immediate parent; no ground truth enters prompts.
-- Invocation: every call explicitly selects Terra and low reasoning; event logs identify tool use and halt affected chains.
+- Invocation: every call explicitly selects its run's model (Terra or Haiku) and low reasoning; event logs identify tool use and halt affected chains; a run database never mixes models.
 - Storage: attempts and completed outputs are immutable, failed attempts remain distinct, resume skips completed cells, and overlength text remains unchanged.
 - Design: budgets match across conditions and include headings; development data cannot enter final aggregation.
 - Analysis: hand-calculated examples agree; paired resamples retain document identity; missing outputs are not zeroes.

@@ -6,17 +6,22 @@ import streamlit as st
 
 st.set_page_config(page_title='AI Telephone', layout='wide')
 st.title('AI Telephone')
-st.caption('Requested model: gpt-6.1-terra · Local saved records · No model calls from this app')
+# Each model is a separate run with its own database; results are never pooled.
+RUNS = {'gpt-6.1-terra (Codex CLI)': ('gpt-6.1-terra', 'artifacts/development.sqlite'),
+        'claude-haiku-5-5 (Claude Code CLI)': ('claude-haiku-5-5', 'artifacts/development-haiku.sqlite')}
+run_label = st.sidebar.radio('Model run', list(RUNS))
+model, db_file = RUNS[run_label]
+st.caption(f'Requested model: {model} · Local saved records · No model calls from this app')
 source_path = Path('data/sources.jsonl')
 docs = [json.loads(line) for line in source_path.read_text(encoding='utf-8').splitlines() if line.strip()] if source_path.exists() else []
-db_path = Path('artifacts/development.sqlite')
+db_path = Path(db_file)
 rows = []
 if db_path.exists():
     with sqlite3.connect(f'file:{db_path.resolve().as_posix()}?mode=ro', uri=True) as db:
         db.row_factory = sqlite3.Row
         rows = [dict(row) for row in db.execute('SELECT generation_id, attempt, status, output, word_count FROM attempts')]
 st.warning('Development work in progress. Sources are unreviewed; no final study or measured results are available.')
-st.caption(f'Development database · {len(docs)} draft document(s) · {len(rows)} recorded attempt(s)')
+st.caption(f'Development database ({db_path}) · {len(docs)} draft document(s) · {len(rows)} recorded attempt(s)')
 tabs = st.tabs(['Chain explorer', 'Method comparison', 'Evidence review', 'Results'])
 if docs:
     selected = st.sidebar.selectbox('Document', [d['id'] for d in docs])

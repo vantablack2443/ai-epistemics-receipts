@@ -17,7 +17,7 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | 2.2 Paper excerpts (optional) | Team (human) | not started |
 | 3 Source review (AI) | Haiku agent + orchestrator | **done for Haiku half** — 50 approved, 7 meanings revised, 0 rejected; `data/v2/sources.jsonl` built (interim, 8 docs; rebuilt when Terra half arrives) |
 | 3b Example selection (AI) | Haiku agent | running for E1–E3; E4–E5 cutoff 18:00 |
-| 4 Development runs | both sides | blocked by 1, 3 |
+| 4 Development runs | both sides | Haiku dev run done (60/60 success, 6.8 s/call); prompt fixed; one/few dev chains to rerun once examples are final |
 | 5 Freeze | Team sign-off | blocked by 4 |
 | 6 Final collection | both sides | blocked by 5 |
 | 7 Opus annotation + human audit | Claude side + team | blocked by 6 |
@@ -25,6 +25,12 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | Codex phases 0, 0b, 1 | Codex side | ready to start |
 
 ## Log
+- 2026-11-14 17:15 — Haiku dev run: 60/60 success, mean 6.8 s/call, no tool events. Problem:
+  zero-shot limited outputs were 10/10 over 250 words and used markdown, example-based ones
+  were plain and shorter. Prompt fixed for every variant (hard-limit wording; plain-prose
+  line). Check run (10 zero-limited calls): 9/10 within 250 (one at 262), all plain prose.
+  Free-length outputs differ strongly by prompt (≈620 zero vs ≈190 few words): report as a
+  finding and treat length as a covariate; the limited scenario is the controlled comparison.
 - 2026-11-14 17:10 — Gate 3 (AI review, Haiku half) passed; revisions are accuracy fixes (e.g.
   long-06-f1 "replicated" → repeated by the same group). Noted: long-05 and dev-long-02 text
   contains the words "invented"/"fictional" (harmless, left unedited). build_sources tool: 20

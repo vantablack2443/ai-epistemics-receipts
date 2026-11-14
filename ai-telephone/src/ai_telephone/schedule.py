@@ -21,3 +21,29 @@ def balanced_schedule(documents, count=30, seed=1729):
             conditions = list('ABC'); rng.shuffle(conditions)
             result.append({'block': block + 1, 'document_id': pools[category][block].id, 'conditions': conditions})
     return result
+
+# --- Design v2 ---------------------------------------------------------------------
+
+PROMPTS = ('zero', 'one', 'few')
+LENGTHS = ('limited', 'free')
+
+def all_chains():
+    return [{'prompt': p, 'length': l} for p in PROMPTS for l in LENGTHS]
+
+def shuffled_chains(seed=1729):
+    """The six (prompt, length) chains of one document in a seeded random order."""
+    chains = all_chains()
+    random.Random(seed).shuffle(chains)
+    return chains
+
+def schedule_v2(docs, seed=1729):
+    """Test documents in shuffled order; per document its six chains shuffled. Deterministic."""
+    rng = random.Random(seed)
+    tests = sorted((d for d in docs if d.split == 'test'), key=lambda d: d.id)
+    rng.shuffle(tests)
+    result = []
+    for doc in tests:
+        chains = all_chains()
+        rng.shuffle(chains)
+        result.append({'document_id': doc.id, 'chains': chains})
+    return result

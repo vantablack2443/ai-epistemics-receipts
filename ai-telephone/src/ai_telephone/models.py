@@ -43,3 +43,37 @@ class Annotation(BaseModel):
         if self.label != 'preserved' and not self.rationale.strip():
             raise ValueError('non-preserved items require a rationale')
         return self
+
+
+class ItemV2(BaseModel):
+    id: str
+    type: Literal['finding', 'qualification']
+    quotation: str
+    meaning: str
+
+class DocumentV2(BaseModel):
+    id: str
+    split: Literal['development', 'test']
+    kind: Literal['fictional', 'paper']
+    text: str
+    provenance: str
+    licence: str
+    items: list[ItemV2]
+    reviewed: bool = False
+
+    @model_validator(mode='after')
+    def validate_v2(self):
+        if not 6 <= len(self.items) <= 10:
+            raise ValueError('6 to 10 items required')
+        if sum(i.type == 'finding' for i in self.items) not in (1, 2):
+            raise ValueError('1 or 2 findings required')
+        if len({i.id for i in self.items}) != len(self.items):
+            raise ValueError('item IDs must be unique within document')
+        if any(not i.id.startswith(f'{self.id}-') for i in self.items):
+            raise ValueError(f'item IDs must start with "{self.id}-"')
+        for i in self.items:
+            if self.text.count(i.quotation) != 1 or not i.quotation:
+                raise ValueError(f'quotation of {i.id} must occur exactly once in the text')
+        if not 900 <= len(self.text.split()) <= 1500:
+            raise ValueError('text must be 900 to 1500 words')
+        return self

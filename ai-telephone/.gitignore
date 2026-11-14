@@ -5,3 +5,5 @@ __pycache__/
 .pytest_cache/
 artifacts/*.sqlite
 artifacts/pytest-tmp*/
+artifacts/*.html
+artifacts/review-checks.json

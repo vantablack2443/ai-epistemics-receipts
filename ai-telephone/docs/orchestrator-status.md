@@ -10,9 +10,9 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | Step | Owner | Status |
 |---|---|---|
 | 1 Pipeline v2 code | Claude side (Haiku agent) | **done** — gate verified 17:20: 97 tests; exact prompt text for all 6 variants; all CLI commands; Gemini tools blocked (sandbox + deny rules) and detected; real Gemini smoke `GEMINI_OK` |
-| 2.1 Sources long-01–06, dev-long-01–02 | Claude side (Haiku) | not started |
+| 2.1 Sources long-01–06, dev-long-01–02 | Claude side (Haiku) | **done** — gate 18:05: 8 docs, 0 flags, max overlap 0.18 |
 | 2.1 Sources long-07–12, dev-long-03 | Codex side (Terra) | not started |
-| 2.1b Examples E1–E3 + Haiku candidates | Claude side (Haiku) | not started |
+| 2.1b Examples E1–E3 + Haiku candidates | Claude side (Haiku) | **done** — E1–E3 (153/184/244 words), 6 candidates (4 over 60 words, kept) |
 | 2.1b Examples E4–E5 + Terra candidates | Codex side (Terra) | not started |
 | 2.2 Paper excerpts (optional) | Team (human) | not started |
 | 3 Source review + example selection | Team (human) | blocked by 2 |
@@ -24,6 +24,11 @@ A step moves to **done** only after its gate is verified. Plans: `docs/plan-clau
 | Codex phases 0, 0b, 1 | Codex side | ready to start |
 
 ## Log
+- 2026-11-14 18:05 — Gate 2 (Claude half) passed. long-03 and long-06 failed the agent's
+  stricter 1,000-word floor; the brief's rule is 900–1,500, so the **first attempt passing the
+  brief's checks** was used (long-03 attempt 1, 961 words; long-06 attempt 1, 909 words), no
+  text edited. For human review: several quotations are short anchors (long-03-q1, -q4,
+  long-04-f2, long-05-f2, long-06-f1); their `meaning` carries the content to preserve.
 - 2026-11-14 17:35 — Team decision: Gemini Flash is only an optional third test model, run by
   the team member by hand at the end if time allows. No agent or orchestrator makes Gemini or
   Google calls. Antigravity backup annotator removed; Opus 5.5 is the only annotator.

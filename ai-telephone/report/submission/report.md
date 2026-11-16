@@ -1,8 +1,8 @@
 # AI Telephone and Information Preservation Across Repeated Technical Summaries
 
-Bilal Amin Dipu and Thejitha
+Bilal Amin, Dipu Balamurugan, and Theijitha Kulunuguna
 
-Saarland University (Bilal Amin Dipu) | biam00002@stud.uni-saarland.de
+Saarland University | biam00002@stud.uni-saarland.de, dipubalamurugan@gmail.com, thejitha10@gmail.com
 
 Research conducted at the AI x Epistemics Research Sprint, November 2026
 

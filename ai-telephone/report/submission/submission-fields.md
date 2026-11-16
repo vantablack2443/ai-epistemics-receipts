@@ -8,17 +8,17 @@ Repeated AI summaries can retain a headline while losing the qualifications need
 
 Suggested team name: AI Telephone
 
-Authors: Bilal Amin Dipu and Thejitha
+Authors: Bilal Amin, Dipu Balamurugan, Theijitha Kulunuguna
 
-Contact: biam00002@stud.uni-saarland.de
+Contact: biam00002@stud.uni-saarland.de; dipubalamurugan@gmail.com; thejitha10@gmail.com
 
-Affiliation: Saarland University (Bilal Amin Dipu); Thejitha affiliation not supplied.
+Affiliation: Saarland University (all three authors).
 
 Suggested track: Track 1 Model Epistemics & Decision-Making Evals
 
 Code: https://github.com/vantablack2443/ai-epistemics-receipts/tree/codex/ai-telephone-analysis/ai-telephone
 
-Report: report.pdf
+Report: Report-final.pdf (official template)
 
 Slides: slides.pdf
 

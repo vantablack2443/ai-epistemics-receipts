@@ -1,0 +1,147 @@
+{
+  "summary": {
+    "documents": 15,
+    "by_split_kind": {
+      "test/fictional": 12,
+      "development/fictional": 3
+    },
+    "with_flags": 0,
+    "tentative_findings": [
+      "dev-long-02",
+      "dev-long-03",
+      "long-02",
+      "long-04",
+      "long-07",
+      "long-11",
+      "long-12"
+    ],
+    "max_word_overlap": {
+      "a": "long-08",
+      "b": "dev-long-03",
+      "word_jaccard": 0.195,
+      "cross_split": true
+    }
+  },
+  "documents": {
+    "long-01": {
+      "id": "long-01",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1046,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "long-02": {
+      "id": "long-02",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1106,
+      "finding_hedged": true,
+      "flags": []
+    },
+    "long-04": {
+      "id": "long-04",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1191,
+      "finding_hedged": true,
+      "flags": []
+    },
+    "long-05": {
+      "id": "long-05",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1022,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "dev-long-01": {
+      "id": "dev-long-01",
+      "split": "development",
+      "kind": "fictional",
+      "words": 1018,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "dev-long-02": {
+      "id": "dev-long-02",
+      "split": "development",
+      "kind": "fictional",
+      "words": 1084,
+      "finding_hedged": true,
+      "flags": []
+    },
+    "long-03": {
+      "id": "long-03",
+      "split": "test",
+      "kind": "fictional",
+      "words": 961,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "long-06": {
+      "id": "long-06",
+      "split": "test",
+      "kind": "fictional",
+      "words": 909,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "long-07": {
+      "id": "long-07",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1136,
+      "finding_hedged": true,
+      "flags": []
+    },
+    "long-08": {
+      "id": "long-08",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1219,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "long-09": {
+      "id": "long-09",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1347,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "long-10": {
+      "id": "long-10",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1211,
+      "finding_hedged": false,
+      "flags": []
+    },
+    "long-11": {
+      "id": "long-11",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1295,
+      "finding_hedged": true,
+      "flags": []
+    },
+    "long-12": {
+      "id": "long-12",
+      "split": "test",
+      "kind": "fictional",
+      "words": 1175,
+      "finding_hedged": true,
+      "flags": []
+    },
+    "dev-long-03": {
+      "id": "dev-long-03",
+      "split": "development",
+      "kind": "fictional",
+      "words": 1221,
+      "finding_hedged": true,
+      "flags": []
+    }
+  }
+}

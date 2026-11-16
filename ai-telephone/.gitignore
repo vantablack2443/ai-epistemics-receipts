@@ -7,3 +7,7 @@ artifacts/*.sqlite
 artifacts/pytest-tmp*/
 artifacts/*.html
 artifacts/review-checks.json
+artifacts/pytest-analysis/
+artifacts/pytest-submission*/
+artifacts/test-temp/
+report/qa/

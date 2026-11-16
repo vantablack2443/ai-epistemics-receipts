@@ -1,6 +1,14 @@
 # AI Telephone
 
-**Status: research prototype; a preliminary development chain exists, but no final results or human-reviewed dataset exist.** Do not use this directory as a completed study or submission. The existing `receipts-study` is separate; no code or data has been reused from it.
+**Current status (16 November 2026): the Haiku experiment is complete and the submission package is prepared for author review.** Twelve fictional test reports produced 360 successful summaries and 216 Opus-annotated summaries. No human source review or annotation audit is recorded. The separate `receipts-study` is outside this study.
+
+Read [the submission report](report/submission/report.pdf), [editable report](report/submission/report.md), and [submission package guide](report/submission/README.md). The package includes six slides, a four-minute narration script, form text, and archived research artifacts. No submission has been sent.
+
+The primary round-five, capped few-minus-zero contrast is +0.20 percentage points (95% paired document-bootstrap interval −8.33 to +8.93; n = 12). This does not establish a lasting preservation benefit. Uncapped prompting also changes output length substantially. All final sources used here were Haiku-drafted; planned Terra and real-paper extensions are absent. See `results/analysis/` and `report/audit_submission.py` for the numerical evidence and integrity checks. AI Telephone code was developed during the sprint according to repository history; no pre-sprint code reuse from the separate receipts study is recorded.
+
+The sections below retain earlier pilot notes and development plans for provenance; they do not describe the completed v2 experiment. The final report and saved exports describe the completed study.
+
+## Earlier development notes
 
 The study tests preservation of a finding and three qualifications in repeated summaries. The planned comparison is structured preservation (C) minus ordinary prose (A), paired by document. B isolates the preservation instruction. A direct 45-word summary provides a control for the ordinary chain only. See `docs/protocol.md` and `docs/annotation.md`.
 

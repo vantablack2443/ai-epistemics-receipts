@@ -1,0 +1,7 @@
+drafter,prompt,length,n_documents,mean_rate
+haiku,zero,limited,12,0.8472222222222222
+haiku,zero,free,12,0.9791666666666666
+haiku,one,limited,12,0.7956349206349206
+haiku,one,free,12,0.8625992063492064
+haiku,few,limited,12,0.8492063492063492
+haiku,few,free,12,0.8159722222222222

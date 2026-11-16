@@ -1,0 +1,2 @@
+model,contrast,length,round,n_pairs,difference,low,high
+haiku,few-zero,limited,5,12,0.001984126984126991,-0.08333333333333333,0.0892857142857143

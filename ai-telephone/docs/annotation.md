@@ -21,3 +21,7 @@ Commands:
     uv run python -m ai_telephone.annotate label --model haiku
     uv run python -m ai_telephone.annotate audit --model haiku --n 60
     uv run python -m ai_telephone.annotate agree --model haiku
+
+## Amendments
+
+Protocol amendment (annotation validator only): the Opus annotator joined verbatim fragments of a summary with "..." (long-05-few-free-r3), which the validator rejected. Quotations joined by ellipses are now accepted only if every fragment is verbatim and in order. No label was changed; the 73 summaries already labelled passed the stricter rule; the stopped item is re-validated from its stored output with no new call. Made after the Haiku collection and before the Terra freeze, so both models are annotated under the same rule; freeze/haiku.json therefore no longer verifies for annotate.py by design.

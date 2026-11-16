@@ -179,11 +179,12 @@ def _check_example(e, where):
 def load_selected(path=SELECTED_PATH):
     """Examples selected by humans (docs/examples-brief.md, Step E3), or None if the file is absent.
 
-    Relative paths resolve against the project root. The file holds either a list of five
-    records or an object keyed by example ID (E1..E5, read in ID order). Each record needs
-    ``source``, ``good``, ``bad`` and ``why_bad``; other fields (``good_from``, ``bad_from``)
-    are provenance and are ignored here. E1 is the one-shot example; all five form the
-    few-shot set. Returns (ONE_SHOT, FEW_SHOT).
+    Relative paths resolve against the project root. The file holds a list of five records, an
+    object keyed by example ID (E1..E5, read in ID order), or a wrapper object with the keyed
+    object under ``examples`` (for example ``{"selected_by": ..., "examples": {...}}``). Each
+    record needs ``source``, ``good``, ``bad`` and ``why_bad``; any other keys (``good_from``,
+    ``bad_from``, ``bad_type``, ``source_note``) are provenance and are dropped here. E1 is the
+    one-shot example; all five form the few-shot set. Returns (ONE_SHOT, FEW_SHOT).
     """
     p = Path(path)
     if not p.is_absolute():
@@ -191,6 +192,8 @@ def load_selected(path=SELECTED_PATH):
     if not p.is_file():
         return None
     data = json.loads(p.read_text(encoding='utf-8'))
+    if isinstance(data, dict) and 'examples' in data:
+        data = data['examples']
     if isinstance(data, dict):
         records = [data[k] for k in sorted(data)]
     elif isinstance(data, list):
@@ -201,6 +204,7 @@ def load_selected(path=SELECTED_PATH):
         raise ValueError('selected examples must contain exactly five records (E1..E5)')
     for n, record in enumerate(records, 1):
         _check_example(record, f'example {n}')
+    records = [{key: record[key] for key in _REQUIRED} for record in records]
     return [records[0]], records
 
 def render_examples(prompt: str, path=SELECTED_PATH) -> str:

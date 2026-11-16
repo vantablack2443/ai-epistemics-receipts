@@ -40,6 +40,23 @@ JUDGES = {'opus-5-5': JUDGE}
 SCORED_ROUNDS = {1, 3, 5}
 LABELS = {'preserved', 'omitted', 'strengthened', 'weakened', 'contradicted'}
 
+def quotation_ok(quote, summary):
+    """A quotation without ellipses must be a verbatim substring of the summary. With ellipses
+    ("..." or "…"), every non-empty fragment (stripped) must occur in the summary, in order."""
+    if '...' not in quote and '…' not in quote:
+        return quote in summary
+    fragments = [f.strip() for f in re.split(r'\.\.\.|…', quote)]
+    fragments = [f for f in fragments if f]
+    if not fragments:
+        return False
+    position = 0
+    for fragment in fragments:
+        found = summary.find(fragment, position)
+        if found < 0:
+            return False
+        position = found + len(fragment)
+    return True
+
 def parse_judgement(text, item_ids, summary):
     """Validate the judge's JSON strictly; raise ValueError rather than guess."""
     cleaned = re.sub(r'^```(?:json)?\s*|\s*```$', '', text.strip())
@@ -51,12 +68,12 @@ def parse_judgement(text, item_ids, summary):
         if i.get('label') not in LABELS:
             raise ValueError(f"invalid label {i.get('label')!r}")
         quote = i.get('quotation') or ''
-        if i['label'] != 'omitted' and quote and quote not in summary:
+        if i['label'] != 'omitted' and quote and not quotation_ok(quote, summary):
             raise ValueError(f"{i['item_id']}: quotation is not verbatim from the summary")
         if not (i.get('rationale') or '').strip():
             raise ValueError(f"{i['item_id']}: missing rationale")
     claims = data.get('unsupported_claims', [])
-    if not isinstance(claims, list) or any((c.get('quotation') or '') not in summary for c in claims):
+    if not isinstance(claims, list) or any(not quotation_ok(c.get('quotation') or '', summary) for c in claims):
         raise ValueError('unsupported claims must quote the summary verbatim')
     return items, claims
 

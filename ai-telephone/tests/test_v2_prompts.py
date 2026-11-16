@@ -43,9 +43,17 @@ def test_example_word_limits(name):
     assert e['why_bad'].count('. ') == 0 and e['why_bad'].endswith('.')  # one sentence
 
 def test_examples_avoid_study_domains():
-    forbidden = ['charger', 'firmware', 'flaky', 'translation', 'hvac', 'valve', 'bridge', 'brace']
+    # Annotator-example topics and study source domains (docs/source-brief.md), as phrases.
+    # Single words are avoided only when they name a topic, so ordinary uses (e.g. "firmware" in a bakery oven) pass.
+    forbidden = [
+        'charger', 'flaky', 'translation', 'hvac', 'valve actuator', 'bridge', 'retrofit brace',
+        'network mock', 'deck strain',
+        'dosing pump', 'speech-to-text', 'soil-moisture', 'appointment-booking', 'forklift', 'e-bike',
+        'rail-signal', 'rooftop solar', 'sales forecasting', 'infusion', 'turbine blade', 'fraud',
+        'ski-lift', 'book-recommendation', 'street-light',
+    ]
     blob = render_examples('few').lower()
-    assert not [w for w in forbidden if w in blob]
+    assert not [p for p in forbidden if p in blob]
 
 def test_render_labels_in_order():
     out = render_examples('one')

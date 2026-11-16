@@ -191,11 +191,33 @@ def test_selected_examples_drive_render_and_prompt(tmp_path, monkeypatch):
     assert render_examples('one', path=path) == expected_block(one)
     assert render_examples('few', path=path) == expected_block(few)
     assert 'haiku run 1' not in render_examples('few', path=path)  # provenance is not shown to the summarizer
-    # make_prompt_v2 reads the default location; point that at the temporary file
+    # make_prompt_v2 reads the default location (SELECTED_PATH, the real file); redirect every
+    # load_selected call, whatever path it is given, to the temporary file
     real = se.load_selected
-    monkeypatch.setattr(se, 'load_selected', lambda path=se.SELECTED_PATH: real(path))
+    monkeypatch.setattr(se, 'load_selected', lambda *args, **kwargs: real(path))
     prompt = make_prompt_v2('SOURCE', 'few', 'free')
     assert expected_block(few) in prompt and prompt.endswith('Text to summarize:\nSOURCE')
+
+
+def test_selected_wrapped_form_ignores_extra_keys(tmp_path):
+    wrapped = tmp_path / 'wrapped.json'
+    keyed = {f'E{n}': record(name, good_from='haiku run 1', bad_from='constructed', bad_type='omission',
+                             source_note='fixture')
+             for n, name in enumerate(ORDER, 1)}
+    wrapped.write_text(json.dumps({'selected_by': 'Named Person', 'examples': keyed}), encoding='utf-8')
+    one, few = load_selected(wrapped)
+    assert one == [few[0]] and len(few) == 5
+    assert all(set(e) == {'source', 'good', 'bad', 'why_bad'} for e in few)
+    assert few[0]['source'] == EXAMPLES['coupons']['source']
+    assert render_examples('few', path=wrapped) == expected_block(few)
+    assert 'haiku run 1' not in render_examples('few', path=wrapped)
+
+    short = tmp_path / 'wrapped_short.json'
+    short.write_text(json.dumps({'selected_by': 'Named Person',
+                                 'examples': {f'E{n}': record(name) for n, name in enumerate(ORDER[:4], 1)}}),
+                     encoding='utf-8')
+    with pytest.raises(ValueError, match='exactly five'):
+        load_selected(short)
 
 
 def test_selected_list_form_and_validation(tmp_path):

@@ -1,0 +1,393 @@
+{
+  "created_utc": "2026-11-14T16:48:55.897654+00:00",
+  "status": "frozen",
+  "design": "v2",
+  "seed": 1729,
+  "model_key": "haiku",
+  "backend": "haiku",
+  "model": "claude-haiku-5-5",
+  "reasoning_effort": "low",
+  "harness": "Claude Code CLI (signed-in Claude)",
+  "cli_version": "2.1.325 (Claude Code)",
+  "args": [
+    "claude",
+    "-p",
+    "--model",
+    "claude-haiku-5-5",
+    "--effort",
+    "low",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--setting-sources",
+    "",
+    "--no-session-persistence",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--system-prompt",
+    "You are a text summarization assistant."
+  ],
+  "sources": "data/v2/sources.jsonl",
+  "signoff_sha256": "1db95858714a4779da7b664628ce3cf8553b405574e15186009175f1fcc21a44",
+  "files": {
+    "src/ai_telephone/prompts.py": "87fbbb5fa7b29df3669cb5956495ba7b1dd05ef5e7a7f3ac529d9b123b015959",
+    "src/ai_telephone/summarizer_examples.py": "18bb7181b532d4b240474ce607258766a1994044a70ac3b6c2f28c3a082ec5c2",
+    "src/ai_telephone/runner.py": "2fbdac4d818d32226bfd50c30305cdd29af6513bd1c4beef8e5344498b42ef6c",
+    "src/ai_telephone/annotator_prompt.py": "ab15e5e548941d6a24d5423096abf6367f875cac02fed109b257ba4ad3dadb25",
+    "src/ai_telephone/annotate.py": "1d3917c8caa82149c638499a0753468943831bb3a50454c3a48f8c8e36309a34",
+    "docs/design-v2.md": "99970bf72d55723c1245af5ab2938ea736d17ff2624ef940a3ccdb7b868a87e3",
+    "data/v2/sources.jsonl": "4fa5924d99bf7a8130a2b9a8aaa484c772c5c51f00b0fc19f58ed097f250da0c",
+    "data/v2/examples/selected.json": "972572233cc6e07393b5015dd0a67d296f002d4246b00cf0818a250ebbf3388c"
+  },
+  "schedule": [
+    {
+      "document_id": "long-05",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        }
+      ]
+    },
+    {
+      "document_id": "long-03",
+      "chains": [
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        }
+      ]
+    },
+    {
+      "document_id": "long-04",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        }
+      ]
+    },
+    {
+      "document_id": "long-10",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        }
+      ]
+    },
+    {
+      "document_id": "long-12",
+      "chains": [
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        }
+      ]
+    },
+    {
+      "document_id": "long-06",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        }
+      ]
+    },
+    {
+      "document_id": "long-02",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        }
+      ]
+    },
+    {
+      "document_id": "long-08",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        }
+      ]
+    },
+    {
+      "document_id": "long-09",
+      "chains": [
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        }
+      ]
+    },
+    {
+      "document_id": "long-07",
+      "chains": [
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        }
+      ]
+    },
+    {
+      "document_id": "long-01",
+      "chains": [
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        }
+      ]
+    },
+    {
+      "document_id": "long-11",
+      "chains": [
+        {
+          "prompt": "one",
+          "length": "limited"
+        },
+        {
+          "prompt": "zero",
+          "length": "free"
+        },
+        {
+          "prompt": "zero",
+          "length": "limited"
+        },
+        {
+          "prompt": "one",
+          "length": "free"
+        },
+        {
+          "prompt": "few",
+          "length": "limited"
+        },
+        {
+          "prompt": "few",
+          "length": "free"
+        }
+      ]
+    }
+  ]
+}

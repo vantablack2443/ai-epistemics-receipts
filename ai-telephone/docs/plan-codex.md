@@ -94,7 +94,13 @@ Tell the human: "Phase 0 done, smoke test passed."
 
 ---
 
-## Phase 0b — Terra drafts its share of sources and examples (Saturday evening, before Phase 1)
+## Phase 0b — CANCELLED (team decision 17:20): skip this phase
+
+All sources and examples were drafted by Haiku on the other side and are already in
+`data/v2/sources.jsonl` and `data/v2/examples/selected.json`. Do not draft anything. Go to Phase 1.
+The text below is kept only for the record.
+
+### (cancelled) Terra drafts its share of sources and examples
 
 Also allowed to create/edit: `ai-telephone/data/v2/drafts/fictional-terra.jsonl`,
 `ai-telephone/data/v2/examples/E4.txt`, `E5.txt`, and append to
@@ -380,10 +386,16 @@ many `limited` outputs were over 250 words.
 
 **Wait** until the human says "frozen" and `freeze/terra.json` exists after pulling.
 
-### Step 3.1 — verify the freeze
+### Step 3.1 — create and verify the Terra freeze
+The other side has frozen Haiku and pushed `freeze/signoff.json`. Create the Terra manifest
+from the same frozen files (codex must be on PATH for the CLI version):
 ```powershell
 git pull --rebase origin codex/ai-telephone
+uv run python -m ai_telephone.freeze --model terra --sources data/v2/sources.jsonl --signoff freeze/signoff.json --output freeze/terra.json
 uv run python -m ai_telephone.freeze --verify freeze/terra.json
+git add freeze/terra.json
+git commit -m "Freeze Terra manifest"
+git push origin codex/ai-telephone
 ```
 **Check:** it prints `verified`. If it reports any mismatch: **STOP**. Do not run.
 
